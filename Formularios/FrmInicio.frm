@@ -141,6 +141,9 @@ Public Sub Conexion()
     On Error GoTo ErrorTrans
     'ME CONECTO !
     Set DBConn = New ADODB.Connection
+    
+    'JOSE REVISAR FORMAS DE CONEXION POR ACA
+    
     'DBConn.ConnectionString = "ODBC;DATABASE=;UID=" & mNomUser & ";PWD=" & mPassword & ";DSN=" & DSN_DEF
     'DBConn.ConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=SISESTILO"
     DBConn.ConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=" & SERVIDOR
@@ -153,7 +156,7 @@ Public Sub Conexion()
              "Data Source=DANIELQ\NANEL; " & _
              "integrated security=SSPI; persist security info=True;"
     'DBConn.ConnectionString = "driver={SQL Server}; server=DANIELQ;database=Centenaro"
-    DBConn.Open DBConn.ConnectionString, txtUsuario, TxtClave
+    DBConn.Open DBConn.ConnectionString, TxtUsuario, TxtClave
 '    ME CONECTO !
 '    Set DBConn = New ADODB.Connection
 '    DBConn.ConnectionString = "driver={SQL Server};server=" & SERVIDOR & ";DATABASE=" & BASEDATO
@@ -226,7 +229,7 @@ End Sub
 Private Sub cmdAceptar_Click()
     
     Set rec = New ADODB.Recordset
-    mNomUser = Trim(txtUsuario)
+    mNomUser = Trim(TxtUsuario)
     
     Conexion
     
@@ -239,12 +242,12 @@ Private Sub cmdAceptar_Click()
         If CUANTAS_VECES = 4 Then
             End
         End If
-        txtUsuario.SetFocus
+        TxtUsuario.SetFocus
         Exit Sub
     End If
 
     sql = "SELECT * FROM USUARIO WHERE " & _
-          "USU_NOMBRE LIKE '" & Trim(txtUsuario) & "' AND " & _
+          "USU_NOMBRE LIKE '" & Trim(TxtUsuario) & "' AND " & _
            "USU_CLAVE LIKE '" & Trim(TxtClave) & "'"
     rec.Open sql, DBConn, adOpenDynamic, adLockOptimistic
     If rec.RecordCount <> -1 Then
@@ -261,7 +264,7 @@ Private Sub cmdAceptar_Click()
         Else
             TxtClave.SelStart = 0
             TxtClave.SelLength = Len(TxtClave)
-            txtUsuario.SetFocus
+            TxtUsuario.SetFocus
             CUANTAS_VECES = CUANTAS_VECES + 1
         End If
     Else
@@ -269,9 +272,9 @@ Private Sub cmdAceptar_Click()
         Label1(1).Caption = " Conectando ... "
         Label1(1).Refresh
         'muestro un figureti de coneccion
-        mNomUser = Trim(txtUsuario)
+        mNomUser = Trim(TxtUsuario)
         mPassword = Trim(TxtClave)
-        usuario = Trim(txtUsuario)
+        usuario = Trim(TxtUsuario)
         
         'BUSCO SUCURSALES---
             BuscoNroSucursal
@@ -283,7 +286,7 @@ Private Sub cmdAceptar_Click()
     rec.Close
 End Sub
 Private Sub CmdAceptar_GotFocus()
-    cmdAceptar.FontBold = True
+    CmdAceptar.FontBold = True
 End Sub
 
 Private Sub CmdSalir_Click()

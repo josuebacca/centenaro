@@ -611,8 +611,8 @@ Begin VB.Form frmFacturaCliente
       TabCaption(1)   =   "&Buscar"
       TabPicture(1)   =   "frmFacturaCliente.frx":002E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "GrdModulos"
-      Tab(1).Control(1)=   "frameBuscar"
+      Tab(1).Control(0)=   "frameBuscar"
+      Tab(1).Control(1)=   "GrdModulos"
       Tab(1).ControlCount=   2
       Begin VB.TextBox txtObservaciones 
          BackColor       =   &H00C0FFFF&
@@ -981,7 +981,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   52428801
+            Format          =   54591489
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker FechaHasta 
@@ -995,7 +995,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   52428801
+            Format          =   54591489
             CurrentDate     =   41098
          End
          Begin VB.Label lblFechaDesde 
@@ -1060,7 +1060,6 @@ Begin VB.Form frmFacturaCliente
       End
       Begin VB.Frame FrameFactura 
          Caption         =   "Factura..."
-         Enabled         =   0   'False
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   9.75
@@ -1127,7 +1126,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   52428801
+            Format          =   54591489
             CurrentDate     =   41098
          End
          Begin VB.Label Ltipo_fac 
@@ -3522,8 +3521,8 @@ Private Sub CmdNuevo_Click()
     'txtPorcentajeIva.Text = "0,00"
     VEstadoFactura = 1
     '--------------
-    'FrameFactura.Enabled = True
-    FrameFactura.Enabled = False
+    FrameFactura.Enabled = True
+    'FrameFactura.Enabled = False
     txtNroSucursal_LostFocus
     txtNroFactura_LostFocus
     
@@ -4568,8 +4567,8 @@ Private Sub GrdModulos_dblClick()
         lblEstado.Caption = ""
         Screen.MousePointer = vbNormal
         '--------------
-        'FrameFactura.Enabled = False
-        FrameCliente.Enabled = False
+        FrameFactura.Enabled = True
+        'FrameCliente.Enabled = False
         '--------------
         'tabDatos.Tab = 0
         'cboCondicion.SetFocus
@@ -4843,15 +4842,15 @@ Private Sub txtCodCli_LostFocus()
             If cmdGrabar.Enabled = True Then
                 'BUSCO EL NUMERO DE FACTURA EN EL FISCAL
                 If FISCAL = "TMT900FA" Then
-                    txtNroFactura.Text = Epson_ConsultarNumeroComprobanteUltimo(cboFactura.ItemData(cboFactura.ListIndex)) + 1
-                    txtNroFactura.Text = Format(txtNroFactura.Text, "00000000")
+                    'txtNroFactura.Text = Epson_ConsultarNumeroComprobanteUltimo(cboFactura.ItemData(cboFactura.ListIndex)) + 1
+                    'txtNroFactura.Text = Format(txtNroFactura.Text, "00000000")
                 Else
                     Select Case cboFactura.ItemData(cboFactura.ListIndex)
                         Case 1 'FACTURAS A
                             
                             
-                            pf.Status ("A")
-                            txtNroFactura.Text = Val(pf.AnswerField_7) + 1
+                            'pf.Status ("A")
+                            'txtNroFactura.Text = Val(pf.AnswerField_7) + 1
     '                        sql = "SELECT FACTURA_C FROM PARAMETROS"
     '                        Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
     '
@@ -4861,8 +4860,8 @@ Private Sub txtCodCli_LostFocus()
     '                        Rec1.Close
                             
                         Case 2 'FACTURA B
-                            pf.Status ("A")
-                            txtNroFactura.Text = Val(pf.AnswerField_5) + 1
+                            'pf.Status ("A")
+                            'txtNroFactura.Text = Val(pf.AnswerField_5) + 1
     '                        sql = "SELECT FACTURA_B FROM PARAMETROS"
     '                        Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
     '
@@ -4872,8 +4871,8 @@ Private Sub txtCodCli_LostFocus()
     '                        Rec1.Close
                         Case 3 'FACTURA C
                         Case 10000 'PARA TIKET
-                            pf.Status ("A")
-                            txtNroFactura.Text = Val(pf.AnswerField_4) + 1
+                            'pf.Status ("A")
+                            'txtNroFactura.Text = Val(pf.AnswerField_4) + 1
                     End Select
                End If
             End If
