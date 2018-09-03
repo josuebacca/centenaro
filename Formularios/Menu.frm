@@ -28,50 +28,60 @@ Begin VB.MDIForm Menu
       BeginProperty Buttons {0713E452-850A-101B-AFC0-4210102A8DA7} 
          NumButtons      =   10
          BeginProperty Button1 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
          EndProperty
          BeginProperty Button2 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Planilla Playeros"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Button3 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Facturacion"
             Object.Tag             =   ""
             ImageIndex      =   3
          EndProperty
          BeginProperty Button4 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Lista de Precios"
             Object.Tag             =   ""
             ImageIndex      =   2
          EndProperty
          BeginProperty Button5 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Clientes"
             Object.Tag             =   ""
             ImageIndex      =   18
          EndProperty
          BeginProperty Button6 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
          EndProperty
          BeginProperty Button7 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Cobranza"
             Object.Tag             =   ""
             ImageIndex      =   5
          EndProperty
          BeginProperty Button8 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Listado Facturas por Vendedor"
             Object.Tag             =   ""
             ImageIndex      =   16
          EndProperty
          BeginProperty Button9 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
             Style           =   3
             MixedState      =   -1  'True
          EndProperty
          BeginProperty Button10 {0713F354-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.ToolTipText     =   "Organizar Ventanas"
             Object.Tag             =   ""
             ImageIndex      =   1
@@ -134,11 +144,13 @@ Begin VB.MDIForm Menu
             Bevel           =   2
             Object.Width           =   6526
             MinWidth        =   6526
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Object.Width           =   7673
             MinWidth        =   7673
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -148,15 +160,18 @@ Begin VB.MDIForm Menu
             Object.Width           =   1587
             MinWidth        =   1587
             TextSave        =   "NÚM"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   1
             Alignment       =   1
             Bevel           =   2
+            Enabled         =   0   'False
             Object.Width           =   1587
             MinWidth        =   1587
             TextSave        =   "MAYÚS"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel5 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -165,7 +180,8 @@ Begin VB.MDIForm Menu
             Bevel           =   2
             Object.Width           =   1587
             MinWidth        =   1587
-            TextSave        =   "21:05"
+            TextSave        =   "11:21"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel6 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -174,7 +190,8 @@ Begin VB.MDIForm Menu
             Bevel           =   2
             Object.Width           =   1940
             MinWidth        =   1940
-            TextSave        =   "03/07/2018"
+            TextSave        =   "16/08/2018"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -468,6 +485,9 @@ Begin VB.MDIForm Menu
          Caption         =   "C&onsulta - Anulaciones"
          Begin VB.Menu mnuConAnuFactura 
             Caption         =   "... de Factura"
+         End
+         Begin VB.Menu mnuAnulaRecibos 
+            Caption         =   "... de Recibos"
          End
       End
       Begin VB.Menu mnuRayaListados 
@@ -1097,6 +1117,11 @@ End Sub
 
 Private Sub mnuAjusteStock_Click()
     frmAjusteStock.Show
+End Sub
+
+Private Sub mnuAnulaRecibos_Click()
+    frmAnulaDocumentos.TipodeAnulacion = 4
+    frmAnulaDocumentos.Show
 End Sub
 
 Private Sub mnuAparatos_Click()

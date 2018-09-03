@@ -1,19 +1,19 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{00025600-0000-0000-C000-000000000046}#5.2#0"; "Crystl32.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmReciboCliente 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recibo de Cliente"
-   ClientHeight    =   6756
+   ClientHeight    =   6765
    ClientLeft      =   0
-   ClientTop       =   756
-   ClientWidth     =   12048
+   ClientTop       =   750
+   ClientWidth     =   12045
    ControlBox      =   0   'False
    BeginProperty Font 
       Name            =   "Tahoma"
-      Size            =   8.4
+      Size            =   8.25
       Charset         =   0
       Weight          =   400
       Underline       =   0   'False
@@ -24,13 +24,13 @@ Begin VB.Form frmReciboCliente
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   6756
-   ScaleWidth      =   12048
+   ScaleHeight     =   6765
+   ScaleWidth      =   12045
    Begin Crystal.CrystalReport Rep 
       Left            =   1965
       Top             =   6645
-      _ExtentX        =   593
-      _ExtentY        =   593
+      _ExtentX        =   741
+      _ExtentY        =   741
       _Version        =   348160
       PrintFileLinesPerPage=   60
    End
@@ -74,7 +74,7 @@ Begin VB.Form frmReciboCliente
       Top             =   45
       Width           =   12000
       _ExtentX        =   21167
-      _ExtentY        =   10922
+      _ExtentY        =   10927
       _Version        =   393216
       Tabs            =   2
       TabsPerRow      =   5
@@ -82,7 +82,7 @@ Begin VB.Form frmReciboCliente
       ForeColor       =   -2147483630
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -138,7 +138,7 @@ Begin VB.Form frmReciboCliente
          TabHeight       =   520
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Tahoma"
-            Size            =   9.6
+            Size            =   9.75
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -154,7 +154,7 @@ Begin VB.Form frmReciboCliente
          Begin VB.Frame Frame5 
             BeginProperty Font 
                Name            =   "Tahoma"
-               Size            =   9.6
+               Size            =   9.75
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -172,7 +172,7 @@ Begin VB.Form frmReciboCliente
                Enabled         =   0   'False
                BeginProperty Font 
                   Name            =   "Tahoma"
-                  Size            =   9.6
+                  Size            =   9.75
                   Charset         =   0
                   Weight          =   700
                   Underline       =   0   'False
@@ -212,7 +212,7 @@ Begin VB.Form frmReciboCliente
                Enabled         =   0   'False
                BeginProperty Font 
                   Name            =   "Tahoma"
-                  Size            =   9.6
+                  Size            =   9.75
                   Charset         =   0
                   Weight          =   700
                   Underline       =   0   'False
@@ -231,7 +231,7 @@ Begin VB.Form frmReciboCliente
                Enabled         =   0   'False
                BeginProperty Font 
                   Name            =   "Tahoma"
-                  Size            =   9.6
+                  Size            =   9.75
                   Charset         =   0
                   Weight          =   700
                   Underline       =   0   'False
@@ -269,8 +269,8 @@ Begin VB.Form frmReciboCliente
                TabIndex        =   38
                Top             =   195
                Width           =   5445
-               _ExtentX        =   9610
-               _ExtentY        =   4276
+               _ExtentX        =   9604
+               _ExtentY        =   4260
                _Version        =   393216
                Cols            =   7
                FixedCols       =   0
@@ -282,7 +282,7 @@ Begin VB.Form frmReciboCliente
                SelectionMode   =   1
                BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                   Name            =   "Tahoma"
-                  Size            =   8.4
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   400
                   Underline       =   0   'False
@@ -326,7 +326,7 @@ Begin VB.Form frmReciboCliente
          TabIndex        =   6
          Top             =   1695
          Width           =   5805
-         _ExtentX        =   10224
+         _ExtentX        =   10239
          _ExtentY        =   6773
          _Version        =   393216
          Style           =   1
@@ -336,7 +336,7 @@ Begin VB.Form frmReciboCliente
          TabHeight       =   520
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Tahoma"
-            Size            =   9.6
+            Size            =   9.75
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -375,7 +375,7 @@ Begin VB.Form frmReciboCliente
             Caption         =   "Cheques"
             BeginProperty Font 
                Name            =   "MS Sans Serif"
-               Size            =   9.6
+               Size            =   9.75
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -400,7 +400,7 @@ Begin VB.Form frmReciboCliente
                Enabled         =   0   'False
                BeginProperty Font 
                   Name            =   "MS Sans Serif"
-                  Size            =   7.8
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   700
                   Underline       =   0   'False
@@ -445,7 +445,7 @@ Begin VB.Form frmReciboCliente
                Caption         =   "Banco"
                BeginProperty Font 
                   Name            =   "MS Sans Serif"
-                  Size            =   7.8
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   700
                   Underline       =   0   'False
@@ -461,7 +461,7 @@ Begin VB.Form frmReciboCliente
                   DisabledPicture =   "frmReciboCliente.frx":046A
                   BeginProperty Font 
                      Name            =   "MS Sans Serif"
-                     Size            =   7.8
+                     Size            =   8.25
                      Charset         =   0
                      Weight          =   700
                      Underline       =   0   'False
@@ -490,7 +490,7 @@ Begin VB.Form frmReciboCliente
                   Enabled         =   0   'False
                   BeginProperty Font 
                      Name            =   "MS Sans Serif"
-                     Size            =   7.8
+                     Size            =   8.25
                      Charset         =   0
                      Weight          =   700
                      Underline       =   0   'False
@@ -626,8 +626,8 @@ Begin VB.Form frmReciboCliente
                TabIndex        =   124
                Top             =   1815
                Width           =   5385
-               _ExtentX        =   9504
-               _ExtentY        =   2074
+               _ExtentX        =   9499
+               _ExtentY        =   2064
                _Version        =   393216
                Cols            =   9
                FixedCols       =   0
@@ -644,12 +644,12 @@ Begin VB.Form frmReciboCliente
                Top             =   480
                Visible         =   0   'False
                Width           =   1455
-               _ExtentX        =   2561
-               _ExtentY        =   550
+               _ExtentX        =   2566
+               _ExtentY        =   556
                _Version        =   393216
                CheckBox        =   -1  'True
                DateIsNull      =   -1  'True
-               Format          =   106299393
+               Format          =   54460417
                CurrentDate     =   41098
             End
             Begin VB.Label Label15 
@@ -779,7 +779,7 @@ Begin VB.Form frmReciboCliente
                Caption         =   "Datos Tarjeta"
                BeginProperty Font 
                   Name            =   "Tahoma"
-                  Size            =   9.6
+                  Size            =   9.75
                   Charset         =   0
                   Weight          =   700
                   Underline       =   0   'False
@@ -919,7 +919,7 @@ Begin VB.Form frmReciboCliente
                   Caption         =   "T O T A L"
                   BeginProperty Font 
                      Name            =   "Tahoma"
-                     Size            =   9.6
+                     Size            =   9.75
                      Charset         =   0
                      Weight          =   700
                      Underline       =   0   'False
@@ -956,8 +956,8 @@ Begin VB.Form frmReciboCliente
                TabIndex        =   71
                Top             =   1545
                Width           =   4755
-               _ExtentX        =   8382
-               _ExtentY        =   2413
+               _ExtentX        =   8387
+               _ExtentY        =   2408
                _Version        =   393216
                Rows            =   1
                Cols            =   15
@@ -994,7 +994,7 @@ Begin VB.Form frmReciboCliente
          Begin VB.Frame Frame4 
             BeginProperty Font 
                Name            =   "Tahoma"
-               Size            =   9.6
+               Size            =   9.75
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1071,7 +1071,7 @@ Begin VB.Form frmReciboCliente
                TabIndex        =   63
                Top             =   1110
                Width           =   2925
-               _ExtentX        =   5144
+               _ExtentX        =   5159
                _ExtentY        =   2328
                _Version        =   393216
                Cols            =   3
@@ -1084,7 +1084,7 @@ Begin VB.Form frmReciboCliente
                SelectionMode   =   1
                BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                   Name            =   "Tahoma"
-                  Size            =   8.4
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   400
                   Underline       =   0   'False
@@ -1116,7 +1116,7 @@ Begin VB.Form frmReciboCliente
                Caption         =   "Total:"
                BeginProperty Font 
                   Name            =   "MS Sans Serif"
-                  Size            =   7.8
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   400
                   Underline       =   0   'False
@@ -1133,7 +1133,7 @@ Begin VB.Form frmReciboCliente
          Begin VB.Frame Frame6 
             BeginProperty Font 
                Name            =   "MS Sans Serif"
-               Size            =   9.6
+               Size            =   9.75
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1203,8 +1203,8 @@ Begin VB.Form frmReciboCliente
                TabIndex        =   50
                Top             =   210
                Width           =   5355
-               _ExtentX        =   9440
-               _ExtentY        =   3831
+               _ExtentX        =   9446
+               _ExtentY        =   3836
                _Version        =   393216
                Cols            =   7
                FixedCols       =   0
@@ -1216,7 +1216,7 @@ Begin VB.Form frmReciboCliente
                SelectionMode   =   1
                BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                   Name            =   "Tahoma"
-                  Size            =   8.4
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   400
                   Underline       =   0   'False
@@ -1246,7 +1246,7 @@ Begin VB.Form frmReciboCliente
          Begin VB.Frame Frame2 
             BeginProperty Font 
                Name            =   "MS Sans Serif"
-               Size            =   9.6
+               Size            =   9.75
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1286,8 +1286,8 @@ Begin VB.Form frmReciboCliente
                TabIndex        =   43
                Top             =   225
                Width           =   5430
-               _ExtentX        =   9567
-               _ExtentY        =   4276
+               _ExtentX        =   9578
+               _ExtentY        =   4286
                _Version        =   393216
                Cols            =   7
                FixedCols       =   0
@@ -1298,7 +1298,7 @@ Begin VB.Form frmReciboCliente
                SelectionMode   =   1
                BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                   Name            =   "Tahoma"
-                  Size            =   8.4
+                  Size            =   8.25
                   Charset         =   0
                   Weight          =   400
                   Underline       =   0   'False
@@ -1339,7 +1339,7 @@ Begin VB.Form frmReciboCliente
          Caption         =   "Cliente..."
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   9.6
+            Size            =   9.75
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
@@ -1428,7 +1428,7 @@ Begin VB.Form frmReciboCliente
          Caption         =   "Recibo..."
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   9.6
+            Size            =   9.75
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
@@ -1443,7 +1443,7 @@ Begin VB.Form frmReciboCliente
          Begin VB.TextBox txtNroSucursal 
             BeginProperty Font 
                Name            =   "Tahoma"
-               Size            =   8.4
+               Size            =   8.25
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1461,7 +1461,7 @@ Begin VB.Form frmReciboCliente
             Enabled         =   0   'False
             BeginProperty Font 
                Name            =   "Tahoma"
-               Size            =   8.4
+               Size            =   8.25
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1489,11 +1489,11 @@ Begin VB.Form frmReciboCliente
             TabIndex        =   3
             Top             =   930
             Width           =   1215
-            _ExtentX        =   2138
-            _ExtentY        =   550
+            _ExtentX        =   2143
+            _ExtentY        =   556
             _Version        =   393216
             DateIsNull      =   -1  'True
-            Format          =   106299393
+            Format          =   54460417
             CurrentDate     =   41176
          End
          Begin VB.Label Label7 
@@ -1510,7 +1510,7 @@ Begin VB.Form frmReciboCliente
             Caption         =   "EST. RECIBO"
             BeginProperty Font 
                Name            =   "Tahoma"
-               Size            =   8.4
+               Size            =   8.25
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
@@ -1556,7 +1556,7 @@ Begin VB.Form frmReciboCliente
          Caption         =   "Buscar por..."
          BeginProperty Font 
             Name            =   "Tahoma"
-            Size            =   9.6
+            Size            =   9.75
             Charset         =   0
             Weight          =   700
             Underline       =   0   'False
@@ -1630,12 +1630,12 @@ Begin VB.Form frmReciboCliente
             TabIndex        =   13
             Top             =   720
             Width           =   1455
-            _ExtentX        =   2582
-            _ExtentY        =   550
+            _ExtentX        =   2566
+            _ExtentY        =   556
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   106299393
+            Format          =   54460417
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker FechaDesde 
@@ -1644,12 +1644,12 @@ Begin VB.Form frmReciboCliente
             TabIndex        =   111
             Top             =   720
             Width           =   1455
-            _ExtentX        =   2561
-            _ExtentY        =   550
+            _ExtentX        =   2566
+            _ExtentY        =   556
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   106299393
+            Format          =   54460417
             CurrentDate     =   41098
          End
          Begin VB.Label lbl 
@@ -1701,7 +1701,7 @@ Begin VB.Form frmReciboCliente
          Top             =   2160
          Width           =   11520
          _ExtentX        =   20320
-         _ExtentY        =   6646
+         _ExtentY        =   6641
          _Version        =   393216
          Cols            =   6
          FixedCols       =   0
@@ -1713,7 +1713,7 @@ Begin VB.Form frmReciboCliente
          SelectionMode   =   1
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Tahoma"
-            Size            =   9.6
+            Size            =   9.75
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1735,7 +1735,7 @@ Begin VB.Form frmReciboCliente
          Caption         =   "Ordenado por :"
          BeginProperty Font 
             Name            =   "MS Sans Serif"
-            Size            =   7.8
+            Size            =   8.25
             Charset         =   0
             Weight          =   400
             Underline       =   0   'False
@@ -1756,7 +1756,7 @@ Begin VB.Form frmReciboCliente
       Caption         =   "Estado"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   9.6
+         Size            =   9.75
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
@@ -1811,7 +1811,7 @@ Private Sub cboFormaPago_LostFocus()
     'fraTarjeta.Visible = False
      If Trim(cboFormaPago.Text) = "TARJETA DE CREDITO" Then
         cboPlan.Clear
-        cbotarjeta.Clear
+        cboTarjeta.Clear
         cSQL = "SELECT TAR_CODIGO, TAR_DESCRI"
         cSQL = cSQL & " FROM TARJETA"
         cSQL = cSQL & " WHERE TTA_CODIGO=1" 'SOLO TARJETA DE CREDITO
@@ -1819,11 +1819,11 @@ Private Sub cboFormaPago_LostFocus()
         rec.Open cSQL, DBConn, adOpenStatic, adLockOptimistic
         If (rec.BOF And rec.EOF) = 0 Then
            Do While rec.EOF = False
-              cbotarjeta.AddItem Trim(rec!TAR_DESCRI)
-              cbotarjeta.ItemData(cbotarjeta.NewIndex) = rec!TAR_CODIGO
+              cboTarjeta.AddItem Trim(rec!TAR_DESCRI)
+              cboTarjeta.ItemData(cboTarjeta.NewIndex) = rec!TAR_CODIGO
               rec.MoveNext
            Loop
-           If cbotarjeta.ListCount > 0 Then cbotarjeta.ListIndex = 0
+           If cboTarjeta.ListCount > 0 Then cboTarjeta.ListIndex = 0
         End If
         rec.Close
                        
@@ -1879,7 +1879,7 @@ Private Sub cboFormaPago_LostFocus()
     
     If Trim(cboFormaPago.Text) = "TARJETA DE DEBITO" Then
         cboPlan.Clear
-        cbotarjeta.Clear
+        cboTarjeta.Clear
         cSQL = "SELECT TAR_CODIGO, TAR_DESCRI"
         cSQL = cSQL & " FROM TARJETA"
         cSQL = cSQL & " WHERE TTA_CODIGO=2" 'SOLO TARJETA DE DEBITO
@@ -1887,11 +1887,11 @@ Private Sub cboFormaPago_LostFocus()
         rec.Open cSQL, DBConn, adOpenStatic, adLockOptimistic
         If (rec.BOF And rec.EOF) = 0 Then
            Do While rec.EOF = False
-              cbotarjeta.AddItem Trim(rec!TAR_DESCRI)
-              cbotarjeta.ItemData(cbotarjeta.NewIndex) = rec!TAR_CODIGO
+              cboTarjeta.AddItem Trim(rec!TAR_DESCRI)
+              cboTarjeta.ItemData(cboTarjeta.NewIndex) = rec!TAR_CODIGO
               rec.MoveNext
            Loop
-           If cbotarjeta.ListCount > 0 Then cbotarjeta.ListIndex = 0
+           If cboTarjeta.ListCount > 0 Then cboTarjeta.ListIndex = 0
         End If
         rec.Close
         
@@ -1910,7 +1910,7 @@ End Sub
 
 Private Sub cboTarjeta_LostFocus()
     Dim mCodTar As String
-    mCodTar = cbotarjeta.ItemData(cbotarjeta.ListIndex)
+    mCodTar = cboTarjeta.ItemData(cboTarjeta.ListIndex)
     cboPlan.Clear
     
     sql = "SELECT PLA_CODIGO, PLA_DESCRI"
@@ -1937,7 +1937,7 @@ Private Sub cmdAceptarCheques_Click()
             J = J + 1
         End If
     Next
-    If J < 6 Then
+    'If J < 6 Then
     
         If GrillaCheques.Rows > 1 Then
             'CARGO EN GRILLA VALORES
@@ -1952,9 +1952,9 @@ Private Sub cmdAceptarCheques_Click()
             txtTotalCheques.Text = ""
             tabValores.Tab = 0
         End If
-    Else
-        MsgBox "Ha superado el numero de cheques por recibo, cargue un nuevo recibo", vbInformation, TIT_MSGBOX
-    End If
+    'Else
+    '    MsgBox "Ha superado el numero de cheques por recibo, cargue un nuevo recibo", vbInformation, TIT_MSGBOX
+    'End If
 End Sub
 
 Private Sub cmdAceptarPagos_Click()
@@ -1991,10 +1991,10 @@ Private Sub cmdAceptoTarjeta_Click()
 End Sub
 
 Private Sub cmdAgregarCheque_Click()
-    If GrillaCheques.Rows = 7 Then
-        MsgBox "No se aceptan mas de 6 cheques por Recibo", vbExclamation, TIT_MSGBOX
-        Exit Sub
-    Else
+'    If GrillaCheques.Rows = 7 Then
+'        MsgBox "No se aceptan mas de 6 cheques por Recibo", vbExclamation, TIT_MSGBOX
+'        Exit Sub
+'    Else
     
         If TxtCheNumero.Text = "" Then
             MsgBox "Debe ingresar el número del cheque", vbExclamation, TIT_MSGBOX
@@ -2043,7 +2043,7 @@ Private Sub cmdAgregarCheque_Click()
         LimpiarCheques
         cmdAgregarCheque.Enabled = False
         TxtCheNumero.SetFocus
-    End If
+    'End If
 End Sub
 
 Private Sub cmdBorroFila_Click()
@@ -2121,7 +2121,7 @@ Private Sub cmdImprimir_Click()
     Next J
     Printer.EndDoc
     Screen.MousePointer = vbNormal
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
 
 End Sub
 
@@ -2129,7 +2129,7 @@ Public Sub ImprimirFactura(Fila As Double)
     Dim Renglon As Double
     
     Screen.MousePointer = vbHourglass
-    lblestado.Caption = "Imprimiendo..."
+    lblEstado.Caption = "Imprimiendo..."
     
     'imprimir por duplicado
     If Fila = 2 Then Fila = 17
@@ -2703,7 +2703,7 @@ End Function
 Private Sub CmdBuscAprox_Click()
     GrdModulos.Rows = 1
     GrdModulos.HighLight = flexHighlightNever
-    lblestado.Caption = "Buscando..."
+    lblEstado.Caption = "Buscando..."
     Screen.MousePointer = vbHourglass
     
     Set Rec1 = New ADODB.Recordset
@@ -2730,13 +2730,13 @@ Private Sub CmdBuscAprox_Click()
         GrdModulos.SetFocus
         GrdModulos.Col = 0
     Else
-        lblestado.Caption = ""
+        lblEstado.Caption = ""
         Screen.MousePointer = vbNormal
         MsgBox "No se encontraron datos... ", vbExclamation, TIT_MSGBOX
         txtCliente.SetFocus
     End If
     Rec1.Close
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Screen.MousePointer = vbNormal
 End Sub
 
@@ -2766,7 +2766,7 @@ Private Sub cmdGrabar_Click()
     On Error GoTo HayError
     DBConn.BeginTrans
     Screen.MousePointer = vbHourglass
-    lblestado.Caption = "Guardando..."
+    lblEstado.Caption = "Guardando..."
     
     sql = "SELECT EST_CODIGO"
     sql = sql & " FROM RECIBO_CLIENTE"
@@ -2968,14 +2968,14 @@ Private Sub cmdGrabar_Click()
         mBorroTransfe = True
     End If
     Screen.MousePointer = vbNormal
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     rec.Close
     cmdImprimir_Click
     CmdNuevo_Click
     Exit Sub
     
 HayError:
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Screen.MousePointer = vbNormal
     If rec.State = 1 Then rec.Close
     DBConn.RollbackTrans
@@ -3202,7 +3202,7 @@ Private Sub Form_Load()
     LLenarFPago
     
     txtNroRecibo.Enabled = True
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     mBorroTransfe = False
     
     'MANDO RECIBO A PANTALLA
@@ -4085,8 +4085,8 @@ Private Sub txtImportePago_LostFocus()
             'mFormaPago = cboFormaPago.ItemData(cboFormaPago.ListIndex)
             
             If Trim(UCase(Mid(cboFormaPago.Text, 1, 50))) = "TARJETA DE CREDITO" Then
-                grdPagos.TextMatrix(grdPagos.row, 3) = frmDatosTarjeta.cbotarjeta.ItemData(frmDatosTarjeta.cbotarjeta.ListIndex)
-                grdPagos.TextMatrix(grdPagos.row, 4) = frmDatosTarjeta.cbotarjeta.List(frmDatosTarjeta.cbotarjeta.ListIndex)
+                grdPagos.TextMatrix(grdPagos.row, 3) = frmDatosTarjeta.cboTarjeta.ItemData(frmDatosTarjeta.cboTarjeta.ListIndex)
+                grdPagos.TextMatrix(grdPagos.row, 4) = frmDatosTarjeta.cboTarjeta.List(frmDatosTarjeta.cboTarjeta.ListIndex)
                 grdPagos.TextMatrix(grdPagos.row, 5) = frmDatosTarjeta.cboPlan.ItemData(frmDatosTarjeta.cboPlan.ListIndex)
                 grdPagos.TextMatrix(grdPagos.row, 6) = frmDatosTarjeta.cboPlan.List(frmDatosTarjeta.cboPlan.ListIndex)
                 grdPagos.TextMatrix(grdPagos.row, 7) = frmDatosTarjeta.txtCupon.Text
@@ -4094,8 +4094,8 @@ Private Sub txtImportePago_LostFocus()
                 grdPagos.TextMatrix(grdPagos.row, 9) = frmDatosTarjeta.txtTar_Autorizacion.Text
             End If
             If Trim(UCase(Mid(cboFormaPago.Text, 1, 50))) = "TARJETA DE DEBITO" Then
-                grdPagos.TextMatrix(grdPagos.row, 3) = frmDatosTarjeta.cbotarjeta.ItemData(frmDatosTarjeta.cbotarjeta.ListIndex)
-                grdPagos.TextMatrix(grdPagos.row, 4) = frmDatosTarjeta.cbotarjeta.List(frmDatosTarjeta.cbotarjeta.ListIndex) & " DEBITO"
+                grdPagos.TextMatrix(grdPagos.row, 3) = frmDatosTarjeta.cboTarjeta.ItemData(frmDatosTarjeta.cboTarjeta.ListIndex)
+                grdPagos.TextMatrix(grdPagos.row, 4) = frmDatosTarjeta.cboTarjeta.List(frmDatosTarjeta.cboTarjeta.ListIndex) & " DEBITO"
             End If
 '            If Trim(UCase(Mid(cboFormaPago.Text, 1, 50))) = "DOLARES" Then
 '                grdPagos.TextMatrix(grdPagos.row, 10) = txtTotDolar.Text
@@ -4107,8 +4107,8 @@ Private Sub txtImportePago_LostFocus()
     For i = 1 To grdPagos.Rows - 1
         mTotalPagos = CDbl(mTotalPagos) + CDbl(grdPagos.TextMatrix(i, 1))
     Next
-    If txtsaldototal.Text < 0 Then
-        txtTotalPagos.Text = Format(CDbl(txtsaldototal.Text) * (-1) - mTotalPagos, "0.00")
+    If txtSaldototal.Text < 0 Then
+        txtTotalPagos.Text = Format(CDbl(txtSaldototal.Text) * (-1) - mTotalPagos, "0.00")
     Else
         txtTotalPagos.Text = Format(CDbl(txtImporteApagar.Text) - mTotalPagos, "0.00")
     End If

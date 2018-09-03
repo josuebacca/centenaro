@@ -611,8 +611,8 @@ Begin VB.Form frmFacturaCliente
       TabCaption(1)   =   "&Buscar"
       TabPicture(1)   =   "frmFacturaCliente.frx":002E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "GrdModulos"
-      Tab(1).Control(1)=   "frameBuscar"
+      Tab(1).Control(0)=   "frameBuscar"
+      Tab(1).Control(1)=   "GrdModulos"
       Tab(1).ControlCount=   2
       Begin VB.TextBox txtObservaciones 
          BackColor       =   &H00C0FFFF&
@@ -981,7 +981,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   52428801
+            Format          =   54263809
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker FechaHasta 
@@ -995,7 +995,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   52428801
+            Format          =   54263809
             CurrentDate     =   41098
          End
          Begin VB.Label lblFechaDesde 
@@ -1127,7 +1127,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   52428801
+            Format          =   54263809
             CurrentDate     =   41098
          End
          Begin VB.Label Ltipo_fac 
@@ -2522,12 +2522,12 @@ Private Sub cmdGrabar_Click()
         
         DBConn.CommitTrans
              
-'        If VerificoSiGrabo = False Then
-'            If rec.State = 1 Then rec.Close
-'            Set frmFacturaCliente = Nothing
-'            Unload Me
-'        End If
-'        If rec.State = 1 Then rec.Close
+        If VerificoSiGrabo = False Then
+            If rec.State = 1 Then rec.Close
+            Set frmFacturaCliente = Nothing
+            Unload Me
+        End If
+        If rec.State = 1 Then rec.Close
         
         Do While VerificoSiGrabo = False
             grabar_factura
@@ -2537,13 +2537,13 @@ Private Sub cmdGrabar_Click()
         'If txtFiscal.Text = "F" And mImprime = "S" Then
         mRespuestaFiscal = True
                         
-'        If FISCAL = "TMT900FA" Then
-'            ImprimoFiscalEpsondll 2
-'        Else
-'            Imprimo_Fiscal
-'            errores_impresion
-'            ActualizoTotalesFiscales
-'        End If
+        If FISCAL = "TMT900FA" Then
+            ImprimoFiscalEpsondll 2
+        Else
+            Imprimo_Fiscal
+            errores_impresion
+            ActualizoTotalesFiscales
+        End If
         
         CmdNuevo_Click
     End If

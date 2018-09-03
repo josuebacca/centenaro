@@ -153,7 +153,7 @@ Public Sub Conexion()
              "Data Source=DANIELQ\NANEL; " & _
              "integrated security=SSPI; persist security info=True;"
     'DBConn.ConnectionString = "driver={SQL Server}; server=DANIELQ;database=Centenaro"
-    DBConn.Open DBConn.ConnectionString, txtUsuario, TxtClave
+    DBConn.Open 'DBConn.ConnectionString, txtUsuario, TxtClave
 '    ME CONECTO !
 '    Set DBConn = New ADODB.Connection
 '    DBConn.ConnectionString = "driver={SQL Server};server=" & SERVIDOR & ";DATABASE=" & BASEDATO
@@ -246,8 +246,10 @@ Private Sub cmdAceptar_Click()
     sql = "SELECT * FROM USUARIO WHERE " & _
           "USU_NOMBRE LIKE '" & Trim(txtUsuario) & "' AND " & _
            "USU_CLAVE LIKE '" & Trim(TxtClave) & "'"
-    rec.Open sql, DBConn, adOpenDynamic, adLockOptimistic
-    If rec.RecordCount <> -1 Then
+    'sql = "SELECT * FROM USUARIO WHERE " & _
+          "USU_NOMBRE LIKE '" & Trim(txtUsuario) & "'"
+    rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
+    If rec.RecordCount <> 1 Then
         sql = "La contraseña de usuario NO ES CORRECTA !" & Chr(13) & Chr(13)
         If CUANTAS_VECES = 3 Then
             sql = sql & "El sistema se cerrará."

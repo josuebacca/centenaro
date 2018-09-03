@@ -43,7 +43,7 @@ Begin VB.Form ABMTipoComprobante
    Begin VB.TextBox txtDescri 
       Height          =   300
       Left            =   210
-      MaxLength       =   25
+      MaxLength       =   50
       TabIndex        =   1
       Top             =   1035
       Width           =   4275
@@ -144,7 +144,7 @@ Function ActualizarListaBase(pMode As Integer)
     End If
     
     If pMode = 4 Then
-        vListView.ListItems.Remove vListView.SelectedItem.Index
+        vListView.ListItems.Remove vListView.SelectedItem.index
         Exit Function
     End If
     
@@ -200,10 +200,10 @@ Function SetMode(pMode As Integer)
     
     Select Case pMode
         Case 1, 2
-            AcCtrl txtDescri
+            AcCtrl txtdescri
             AcCtrl txtAbrevia
         Case 3, 4
-            DesacCtrl txtDescri
+            DesacCtrl txtdescri
             DesacCtrl txtAbrevia
     End Select
     
@@ -261,11 +261,11 @@ Function Validar(pMode As Integer) As Boolean
                              "Ingrese la Identificación del Tipo de Comprobante antes de aceptar.", vbCritical + vbOKOnly, App.Title
             txtID.SetFocus
             Exit Function
-        ElseIf txtDescri.Text = "" Then
+        ElseIf txtdescri.Text = "" Then
             Beep
             MsgBox "Falta información." & Chr(13) & _
                              "Ingrese la descripción del Tipo de Comprobante antes de aceptar.", vbCritical + vbOKOnly, App.Title
-            txtDescri.SetFocus
+            txtdescri.SetFocus
             Exit Function
         ElseIf txtAbrevia.Text = "" Then
             Beep
@@ -297,13 +297,13 @@ Private Sub cmdAceptar_Click()
                 cSQL = "INSERT INTO " & cTabla
                 cSQL = cSQL & "     (TCO_CODIGO, TCO_DESCRI, TCO_ABREVIA) "
                 cSQL = cSQL & "VALUES "
-                cSQL = cSQL & "     (" & XN(txtID.Text) & ", " & XS(txtDescri.Text) & ", "
+                cSQL = cSQL & "     (" & XN(txtID.Text) & ", " & XS(txtdescri.Text) & ", "
                 cSQL = cSQL & XS(txtAbrevia.Text) & ") "
             
             Case 2 'editar
                 
                 cSQL = "UPDATE " & cTabla & " SET "
-                cSQL = cSQL & "     TCO_DESCRI = " & XS(txtDescri.Text)
+                cSQL = cSQL & "     TCO_DESCRI = " & XS(txtdescri.Text)
                 cSQL = cSQL & "    ,TCO_ABREVIA = " & XS(txtAbrevia.Text)
                 cSQL = cSQL & " WHERE TCO_CODIGO  = " & XN(txtID.Text)
             
@@ -387,7 +387,7 @@ Private Sub Form_Load()
             If (rec.BOF And rec.EOF) = 0 Then
                 'si encontró el registro muestro los datos
                 txtID.Text = rec!TCO_CODIGO
-                txtDescri.Text = rec!TCO_DESCRI
+                txtdescri.Text = rec!TCO_DESCRI
                 txtAbrevia.Text = ChkNull(rec!TCO_ABREVIA)
             Else
                 Beep
@@ -420,7 +420,7 @@ Private Sub txtdescri_GotFocus()
     seltxt
 End Sub
 
-Private Sub txtDescri_KeyPress(KeyAscii As Integer)
+Private Sub txtdescri_KeyPress(KeyAscii As Integer)
     KeyAscii = CarTexto(KeyAscii)
 End Sub
 

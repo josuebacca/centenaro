@@ -148,7 +148,7 @@ Begin VB.Form frmAnulaDocumentos
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   52035585
+         Format          =   20840449
          CurrentDate     =   41098
       End
       Begin MSComCtl2.DTPicker FechaHasta 
@@ -162,7 +162,7 @@ Begin VB.Form frmAnulaDocumentos
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   52035585
+         Format          =   20840449
          CurrentDate     =   41098
       End
       Begin VB.Label lblFechaHasta 
@@ -298,8 +298,39 @@ Public TipodeAnulacion As Integer
 Dim i As Integer
 
 Private Sub CmdBuscAprox_Click()
-    GrdModulos.Rows = 1
-    BuscoFacturas
+    Select Case TipodeAnulacion
+        Case 1 'Presupuestos
+            'GrdModulos.Rows = 1
+            'BuscoPedidos
+        Case 2 'REMITOS
+            'GrdModulos.Rows = 1
+            'BuscoRemitos
+        Case 3 'FACTURAS
+            GrdModulos.Rows = 1
+            BuscoFacturas
+        Case 4 'RECIBOS
+            GrdModulos.Rows = 1
+            BuscoRecibos
+        Case 5 'ORDEN COMPRA
+            'GrdModulos.Rows = 1
+            'BuscoOrdenesCompra
+        Case 6 'REMITOS
+            'GrdModulos.Rows = 1
+            'BuscoRemitosProveedor
+        Case 7 'FACTURAS
+            'GrdModulos.Rows = 1
+            'BuscoFacturasProveedor
+        Case 8 'ORDEN DE PAGO
+            'GrdModulos.Rows = 1
+            'BuscoOrdenPago
+        Case 9 'ORDEN DE PAGO
+            'GrdModulos.Rows = 1
+            'BuscoGastosGrales
+        Case 10 'NOTA DE CREDITO
+            'GrdModulos.Rows = 1
+            'BuscoNC
+            
+    End Select
 End Sub
 
 Private Sub BuscoFacturas()
@@ -360,8 +391,29 @@ Private Sub cmdGrabar_Click()
     Screen.MousePointer = vbHourglass
     DBConn.BeginTrans
         
-    ActualizoFactura
-        
+    Select Case TipodeAnulacion
+        Case 1 'Presupuestos
+            'ActualizoPedido
+        Case 2 'REMITOS
+            'ActualizoRemito
+        Case 3 'FACTURAS
+            ActualizoFactura
+        Case 4 'RECIBOS
+            ActualizoRecibo
+        Case 5 'ORDEN COMPRA
+            'ActualizoOrdenCompra
+        Case 6 'REMITO PROVEEDOR
+            'ActualizoRemitoProveedor
+        Case 7 'FACTURAS PROVEEDOR
+            'ActualizoFacturaProveedor
+        Case 8 'ORDEN PAGO
+            'ActualizoOrdenPago
+        Case 9 'ORDEN PAGO
+            'ActualizoGastoGeneral
+        Case 10 'NOTA DE CREDITO
+            'ActualizoNotaCredito
+    End Select
+    
     DBConn.CommitTrans
     lblestado.Caption = ""
     Screen.MousePointer = vbNormal
@@ -522,19 +574,25 @@ Private Sub LlenarComboNotaCredito()
 End Sub
 
 Private Sub ConfiguroGrillaRecibo()
-    GrdModulos.FormatString = "^Tipo|^Número|^Fecha|Cliente|^Estado|codigo estado|" _
-                            & "codigo estado que cambio|TIPO RECIBO|COD CLIENTE"
-                            
-    GrdModulos.ColWidth(0) = 1000 'TIPO_NOTA
+    If TipodeAnulacion = 8 Then
+        GrdModulos.FormatString = "^Tipo Rec|^Número|^Fecha|Importe|Proveedor|^Estado|codigo estado|" _
+                                & "codigo estado que cambio|TIPO RECIBO|COD CLIENTE|REPRESENTADA"
+    Else
+        GrdModulos.FormatString = "^Tipo Rec|^Número|^Fecha|Importe|Cliente|^Estado|codigo estado|" _
+                                & "codigo estado que cambio|TIPO RECIBO|COD CLIENTE|REPRESENTADA"
+    End If
+    GrdModulos.ColWidth(0) = 1000 'TIPO_RECIBO
     GrdModulos.ColWidth(1) = 1300 'NRO RECIBO
-    GrdModulos.ColWidth(2) = 1200 'FECHA_RECIBO
-    GrdModulos.ColWidth(3) = 3900 'CLIENTE
-    GrdModulos.ColWidth(4) = 2000 'ESTADO
-    GrdModulos.ColWidth(5) = 0    'CODIGO ESTADO
-    GrdModulos.ColWidth(6) = 0    'CODIGO ESTADO QUE CAMBIO
-    GrdModulos.ColWidth(7) = 0    'TIPO RECIBO (TCO_CODIGO)
-    GrdModulos.ColWidth(8) = 0    'CODIGO CLIENTE
-    GrdModulos.Cols = 9
+    GrdModulos.ColWidth(2) = 1100 'FECHA_RECIBO
+    GrdModulos.ColWidth(3) = 1100 'IMPORTE
+    GrdModulos.ColWidth(4) = 3000 'CLIENTE
+    GrdModulos.ColWidth(5) = 2000 'ESTADO
+    GrdModulos.ColWidth(6) = 0    'CODIGO ESTADO
+    GrdModulos.ColWidth(7) = 0    'CODIGO ESTADO QUE CAMBIO
+    GrdModulos.ColWidth(8) = 0    'TIPO RECIBO (TCO_CODIGO)
+    GrdModulos.ColWidth(9) = 0    'CODIGO CLIENTE
+    GrdModulos.ColWidth(10) = 0    'REPRESENTADA
+    GrdModulos.Cols = 11
     GrdModulos.Rows = 2
     
 End Sub
@@ -629,20 +687,20 @@ Private Sub GrdModulos_dblClick()
                 End If
                 
             Case 4 'RECIBOS
-                If GrdModulos.TextMatrix(GrdModulos.RowSel, 5) = 2 Then
+                If GrdModulos.TextMatrix(GrdModulos.RowSel, 6) = 2 Then
                     MsgBox "No se puede cambiar el estado al Recibo" & Chr(13) & _
-                           "el mimo ya fue Anulado", vbExclamation, TIT_MSGBOX
+                           ",el mismo ya fue Anulado", vbExclamation, TIT_MSGBOX
                     
                     Exit Sub
                 End If
-                If GrdModulos.TextMatrix(GrdModulos.RowSel, 6) = 3 Then
-                    GrdModulos.TextMatrix(GrdModulos.RowSel, 6) = 2
-                    GrdModulos.TextMatrix(GrdModulos.RowSel, 4) = "ANULADO"
+                If GrdModulos.TextMatrix(GrdModulos.RowSel, 7) = 3 Then
+                    GrdModulos.TextMatrix(GrdModulos.RowSel, 7) = 2
+                    GrdModulos.TextMatrix(GrdModulos.RowSel, 5) = "ANULADO"
                     Call CambiaColorAFilaDeGrilla(GrdModulos, GrdModulos.RowSel, vbRed)
                      
-                ElseIf GrdModulos.TextMatrix(GrdModulos.RowSel, 6) = 2 Then
-                    GrdModulos.TextMatrix(GrdModulos.RowSel, 6) = 3
-                    GrdModulos.TextMatrix(GrdModulos.RowSel, 4) = "DEFINITIVO"
+                ElseIf GrdModulos.TextMatrix(GrdModulos.RowSel, 7) = 2 Then
+                    GrdModulos.TextMatrix(GrdModulos.RowSel, 7) = 3
+                    GrdModulos.TextMatrix(GrdModulos.RowSel, 5) = "DEFINITIVO"
                     Call CambiaColorAFilaDeGrilla(GrdModulos, GrdModulos.RowSel, vbBlack)
                 End If
             
@@ -814,5 +872,135 @@ Public Sub BuscarClientes(Txt As Control, mQuien As String, Optional mCadena As 
     End With
     
     Set B = Nothing
+End Sub
+
+Private Sub BuscoRecibos()
+    lblestado.Caption = "Buscando Recibos..."
+    Screen.MousePointer = vbHourglass
+    
+    sql = "SELECT RC.REC_NUMERO, RC.REC_SUCURSAL, RC.REC_FECHA,RC.REC_TOTAL,"
+    sql = sql & " RC.TCO_CODIGO, TC.TCO_ABREVIA,RC.CLI_CODIGO,"
+    sql = sql & " C.CLI_RAZSOC, E.EST_DESCRI, RC.EST_CODIGO"
+    sql = sql & " FROM RECIBO_CLIENTE RC, CLIENTE C, ESTADO_DOCUMENTO E, TIPO_COMPROBANTE TC"
+    sql = sql & " WHERE"
+    sql = sql & " RC.TCO_CODIGO=TC.TCO_CODIGO"
+    sql = sql & " AND RC.CLI_CODIGO=C.CLI_CODIGO"
+    sql = sql & " AND RC.EST_CODIGO=E.EST_CODIGO"
+    If txtCliente.Text <> "" Then sql = sql & " AND RC.CLI_CODIGO=" & XN(txtCliente)
+    'If txtVendedor.Text <> "" Then sql = sql & " AND RC.VEN_CODIGO=" & XN(txtVendedor)
+    If Not IsNull(FechaDesde) Then sql = sql & " AND RC.REC_FECHA>=" & XDQ(FechaDesde)
+    If Not IsNull(FechaHasta) Then sql = sql & " AND RC.REC_FECHA<=" & XDQ(FechaHasta)
+    'If chkTipo.Value = Checked Then sql = sql & " AND RC.TCO_CODIGO=" & XN(cboDocumento.ItemData(cboDocumento.ListIndex))
+    sql = sql & " ORDER BY RC.REC_SUCURSAL, RC.REC_NUMERO"
+    
+    rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
+    If rec.EOF = False Then
+        Do While rec.EOF = False
+            GrdModulos.AddItem rec!TCO_ABREVIA & Chr(9) & Format(rec!REC_SUCURSAL, "0000") & "-" & Format(rec!REC_NUMERO, "00000000") _
+                               & Chr(9) & rec!REC_FECHA & Chr(9) & Format(rec!REC_TOTAL, "#0.00") & Chr(9) & rec!CLI_RAZSOC _
+                               & Chr(9) & rec!EST_DESCRI & Chr(9) & rec!EST_CODIGO _
+                               & Chr(9) & rec!EST_CODIGO & Chr(9) & rec!TCO_CODIGO _
+                               & Chr(9) & rec!CLI_CODIGO & Chr(9) & ""
+                               
+            If rec!EST_CODIGO = 2 Then
+                Call CambiaColorAFilaDeGrilla(GrdModulos, GrdModulos.Rows - 1, vbRed)
+            ElseIf rec!EST_CODIGO = 1 Then
+                Call CambiaColorAFilaDeGrilla(GrdModulos, GrdModulos.Rows - 1, vbBlue)
+            End If
+            rec.MoveNext
+        Loop
+        GrdModulos.SetFocus
+    Else
+        lblestado.Caption = ""
+        Screen.MousePointer = vbNormal
+        MsgBox "No se encontraron Recibos...", vbExclamation, TIT_MSGBOX
+        'chkCliente.SetFocus
+    End If
+    rec.Close
+    lblestado.Caption = ""
+    Screen.MousePointer = vbNormal
+End Sub
+
+Private Sub ActualizoRecibo()
+    Dim SaldoFactura As String
+    SaldoFactura = "0"
+    
+    For i = 1 To GrdModulos.Rows - 1
+        If GrdModulos.TextMatrix(i, 6) <> GrdModulos.TextMatrix(i, 7) Then
+            Set rec = New ADODB.Recordset
+            
+            sql = "UPDATE RECIBO_CLIENTE"
+            sql = sql & " SET EST_CODIGO=" & XN(GrdModulos.TextMatrix(i, 7))
+            sql = sql & " WHERE"
+            sql = sql & " TCO_CODIGO=" & XN(GrdModulos.TextMatrix(i, 8))
+            sql = sql & " AND REC_NUMERO=" & XN(Right(GrdModulos.TextMatrix(i, 1), 8))
+            sql = sql & " AND REC_SUCURSAL=" & XN(Left(GrdModulos.TextMatrix(i, 1), 4))
+            DBConn.Execute sql
+            
+            'ACTUALIZO EL SALDO DE LAS FACTURAS
+            sql = "SELECT FR.FCL_TCO_CODIGO, FR.FCL_NUMERO, FR.FCL_SUCURSAL, FR.FCL_FECHA,"
+            sql = sql & " FR.REC_IMPORTE,FC.FCL_SALDO"
+            sql = sql & " FROM FACTURAS_RECIBO_CLIENTE FR, FACTURA_CLIENTE FC"
+            sql = sql & " WHERE"
+            sql = sql & " FR.TCO_CODIGO=" & XN(GrdModulos.TextMatrix(i, 8))
+            sql = sql & " AND FR.REC_NUMERO=" & XN(Right(GrdModulos.TextMatrix(i, 1), 8))
+            sql = sql & " AND FR.REC_SUCURSAL=" & XN(Left(GrdModulos.TextMatrix(i, 1), 4))
+            sql = sql & " AND FR.FCL_TCO_CODIGO=FC.TCO_CODIGO"
+            sql = sql & " AND FR.FCL_NUMERO=FC.FCL_NUMERO"
+            sql = sql & " AND FR.FCL_SUCURSAL=FC.FCL_SUCURSAL"
+            
+            
+            rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
+            If rec.EOF = False Then
+                Do While rec.EOF = False
+                    SaldoFactura = CDbl(rec!REC_IMPORTE) + CDbl(rec!FCL_SALDO)
+                    sql = "UPDATE FACTURA_CLIENTE"
+                    sql = sql & " SET FCL_SALDO=" & XN(SaldoFactura)
+                    sql = sql & " WHERE"
+                    sql = sql & " TCO_CODIGO=" & XN(rec!FCL_TCO_CODIGO)
+                    sql = sql & " AND FCL_NUMERO=" & XN(rec!FCL_NUMERO)
+                    sql = sql & " AND FCL_SUCURSAL=" & XN(rec!FCL_SUCURSAL)
+                    DBConn.Execute sql
+                    SaldoFactura = "0"
+                    rec.MoveNext
+                Loop
+            End If
+            rec.Close
+            
+            'ACTUALIZO EL SALDO DE EL DINERO A CTA DEL CLIENTE
+            sql = "SELECT RS.TCO_CODIGO, RS.REC_NUMERO, RS.REC_SUCURSAL,"
+            sql = sql & " RS.REC_FECHA, RS.REC_SALDO, DR.DRE_COMIMP"
+            sql = sql & " FROM DETALLE_RECIBO_CLIENTE DR, RECIBO_CLIENTE_SALDO RS"
+            sql = sql & " WHERE"
+            sql = sql & " RS.TCO_CODIGO=DR.DRE_TCO_CODIGO"
+            sql = sql & " AND RS.REC_NUMERO=DR.DRE_COMNUMERO"
+            sql = sql & " AND RS.REC_SUCURSAL=DR.DRE_COMSUCURSAL"
+            sql = sql & " AND DR.TCO_CODIGO=" & XN(GrdModulos.TextMatrix(i, 8))
+            sql = sql & " AND DR.REC_NUMERO=" & XN(Right(GrdModulos.TextMatrix(i, 1), 8))
+            sql = sql & " AND DR.REC_SUCURSAL=" & XN(Left(GrdModulos.TextMatrix(i, 1), 4))
+            rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
+            
+            If rec.EOF = False Then
+                Do While rec.EOF = False
+                    SaldoFactura = CDbl(rec!DRE_COMIMP) + CDbl(rec!REC_SALDO)
+                    sql = "UPDATE RECIBO_CLIENTE_SALDO"
+                    sql = sql & " SET REC_SALDO=" & XN(SaldoFactura)
+                    sql = sql & " WHERE"
+                    sql = sql & " TCO_CODIGO=" & XN(rec!TCO_CODIGO)
+                    sql = sql & " AND REC_NUMERO=" & XN(rec!REC_NUMERO)
+                    sql = sql & " AND REC_SUCURSAL=" & XN(rec!REC_SUCURSAL)
+                    DBConn.Execute sql
+                    
+                    SaldoFactura = "0"
+                    rec.MoveNext
+                Loop
+            End If
+            rec.Close
+            
+            ''ACTUALIZO LA CTA-CTE
+            'DBConn.Execute QuitoCtaCteCliente(GrdModulos.TextMatrix(i, 9), GrdModulos.TextMatrix(i, 8), _
+                                              Right(GrdModulos.TextMatrix(i, 1), 8), Left(GrdModulos.TextMatrix(i, 1), 4))
+        End If
+    Next
 End Sub
 

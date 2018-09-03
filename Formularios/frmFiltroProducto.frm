@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form frmFiltroProducto 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Filtro Búsqueda Producto"
-   ClientHeight    =   2430
+   ClientHeight    =   1635
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   4380
@@ -18,12 +18,34 @@ Begin VB.Form frmFiltroProducto
    Icon            =   "frmFiltroProducto.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   2430
+   ScaleHeight     =   1635
    ScaleWidth      =   4380
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cbmCerrarFiltro 
+      Caption         =   "&Cerrar"
+      Height          =   375
+      Left            =   3135
+      TabIndex        =   6
+      Top             =   1020
+      Width           =   1110
+   End
+   Begin VB.CommandButton cmdAceptarFiltro 
+      Caption         =   "&Aceptar"
+      Height          =   375
+      Left            =   1995
+      TabIndex        =   5
+      Top             =   1020
+      Width           =   1110
+   End
+   Begin VB.TextBox txtBusqueda 
+      Height          =   345
+      Left            =   870
+      TabIndex        =   4
+      Top             =   450
+      Width           =   3360
+   End
    Begin VB.ComboBox cboLinea 
       Height          =   315
       ItemData        =   "frmFiltroProducto.frx":27A2
@@ -32,6 +54,7 @@ Begin VB.Form frmFiltroProducto
       Style           =   2  'Dropdown List
       TabIndex        =   0
       Top             =   495
+      Visible         =   0   'False
       Width           =   3375
    End
    Begin VB.ComboBox cboRubro 
@@ -42,6 +65,7 @@ Begin VB.Form frmFiltroProducto
       Style           =   2  'Dropdown List
       TabIndex        =   1
       Top             =   840
+      Visible         =   0   'False
       Width           =   3375
    End
    Begin VB.TextBox txtDescriMarca 
@@ -49,6 +73,7 @@ Begin VB.Form frmFiltroProducto
       Left            =   1485
       TabIndex        =   3
       Top             =   1185
+      Visible         =   0   'False
       Width           =   2745
    End
    Begin VB.TextBox txtCodMarca 
@@ -57,30 +82,8 @@ Begin VB.Form frmFiltroProducto
       Left            =   870
       TabIndex        =   2
       Top             =   1185
+      Visible         =   0   'False
       Width           =   585
-   End
-   Begin VB.CommandButton cbmCerrarFiltro 
-      Caption         =   "&Cerrar"
-      Height          =   375
-      Left            =   3135
-      TabIndex        =   6
-      Top             =   1980
-      Width           =   1110
-   End
-   Begin VB.CommandButton cmdAceptarFiltro 
-      Caption         =   "&Aceptar"
-      Height          =   375
-      Left            =   1995
-      TabIndex        =   5
-      Top             =   1980
-      Width           =   1110
-   End
-   Begin VB.TextBox txtBusqueda 
-      Height          =   345
-      Left            =   870
-      TabIndex        =   4
-      Top             =   1530
-      Width           =   3360
    End
    Begin VB.Label Label1 
       AutoSize        =   -1  'True
@@ -89,7 +92,7 @@ Begin VB.Form frmFiltroProducto
       Index           =   2
       Left            =   135
       TabIndex        =   11
-      Top             =   1590
+      Top             =   510
       Width           =   615
    End
    Begin VB.Label Label1 
@@ -100,6 +103,7 @@ Begin VB.Form frmFiltroProducto
       Left            =   135
       TabIndex        =   10
       Top             =   540
+      Visible         =   0   'False
       Width           =   435
    End
    Begin VB.Label Label2 
@@ -110,6 +114,7 @@ Begin VB.Form frmFiltroProducto
       Left            =   135
       TabIndex        =   9
       Top             =   885
+      Visible         =   0   'False
       Width           =   495
    End
    Begin VB.Label Label1 
@@ -120,6 +125,7 @@ Begin VB.Form frmFiltroProducto
       Left            =   135
       TabIndex        =   8
       Top             =   1230
+      Visible         =   0   'False
       Width           =   495
    End
    Begin VB.Label Label1 
@@ -351,7 +357,7 @@ Public Sub BuscarMarcas(Txt As Control, mQuien As String, Optional mCadena As St
     Dim cSQL As String
     Dim hSQL As String
     Dim B As CBusqueda
-    Dim I, posicion As Integer
+    Dim i, posicion As Integer
     Dim cadena As String
     
     Set B = New CBusqueda
