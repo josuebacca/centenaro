@@ -1194,12 +1194,14 @@ Private Function BuscarNAFTA()
       
       
     sql = "SELECT DF.DFC_PRECIO,DF.DFC_TasaVial,DF.DFC_IMP,SUM(DF.DFC_CANTIDAD) AS LITROS"
-    sql = sql & " FROM FACTURA_CLIENTE F, DETALLE_FACTURA_CLIENTE DF"
+    sql = sql & " FROM FACTURA_CLIENTE F, DETALLE_FACTURA_CLIENTE DF, PRODUCTO P"
     sql = sql & " WHERE F.TCO_CODIGO = DF.TCO_CODIGO "
     sql = sql & " AND F.FCL_NUMERO = DF.FCL_NUMERO "
     sql = sql & " AND F.EST_CODIGO<>2"
     sql = sql & " AND F.FCL_SUCURSAL = DF.FCL_SUCURSAL "
-    sql = sql & " AND (DF.PTO_CODIGO = 1 or DF.PTO_CODIGO = 78 or DF.PTO_CODIGO = 84)" ' nafta codigo 1
+    sql = sql & " AND DF.PTO_CODIGO = P.PTO_CODIGO "
+    'sql = sql & " AND (DF.PTO_CODIGO = 1 or DF.PTO_CODIGO = 78 or DF.PTO_CODIGO = 84)" ' nafta codigo 1
+    sql = sql & " AND P.RUB_CODIGO = 1 "
     sql = sql & " AND F.FCL_FECHA BETWEEN " & XDQ(Primer) & " AND " & XDQ(Ultimo)
     sql = sql & " GROUP BY DF.DFC_PRECIO,DF.DFC_IMP,DF.DFC_TasaVial"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
@@ -1207,7 +1209,7 @@ Private Function BuscarNAFTA()
     If rec.EOF = False Then
         Do While rec.EOF = False
             VNETO = NetoGNC(Chk0(rec!DFC_IMP), Format(Chk0(rec!DFC_PRECIO), "0.00"), Chk0(rec!DFC_TasaVial))
-            grdNafta.AddItem rec!DFC_IMP & Chr(9) & "" & Chr(9) & _
+            grdNafta.AddItem rec!DFC_IMP & Chr(9) & Format(VNETO, "0.00") & Chr(9) & _
                            Format(rec!DFC_PRECIO, "0.00") & Chr(9) & Format(rec!LITROS, "0.00") _
                            & Chr(9) & Format(rec!DFC_PRECIO * rec!LITROS, "0.00")
                         
@@ -1286,7 +1288,7 @@ Private Function BuscarGASOIL()
     If rec.EOF = False Then
         Do While rec.EOF = False
             VNETO = NetoGNC(Chk0(rec!DFC_IMP), Format(rec!DFC_PRECIO, "0.00"), rec!DFC_TasaVial)
-            grdGasoil.AddItem rec!DFC_IMP & Chr(9) & "" & Chr(9) & _
+            grdGasoil.AddItem rec!DFC_IMP & Chr(9) & Format(VNETO, "0.00") & Chr(9) & _
                            Format(rec!DFC_PRECIO, "0.00") & Chr(9) & Format(rec!LITROS, "0.00") _
                            & Chr(9) & Format(rec!DFC_PRECIO * rec!LITROS, "0.00")
                         vLitTotal = vLitTotal + Format(rec!LITROS, "0.00")

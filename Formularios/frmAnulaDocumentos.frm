@@ -148,7 +148,7 @@ Begin VB.Form frmAnulaDocumentos
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   20840449
+         Format          =   54657025
          CurrentDate     =   41098
       End
       Begin MSComCtl2.DTPicker FechaHasta 
@@ -162,7 +162,7 @@ Begin VB.Form frmAnulaDocumentos
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   20840449
+         Format          =   54657025
          CurrentDate     =   41098
       End
       Begin VB.Label lblFechaHasta 
@@ -334,7 +334,7 @@ Private Sub CmdBuscAprox_Click()
 End Sub
 
 Private Sub BuscoFacturas()
-    lblestado.Caption = "Buscando Facturas..."
+    lblEstado.Caption = "Buscando Facturas..."
     Screen.MousePointer = vbHourglass
     'poner sucursal
     sql = "SELECT DISTINCT FC.FCL_NUMERO,FC.FCL_SUCURSAL,FC.FCL_FECHA, FC.EST_CODIGO, E.EST_DESCRI,"
@@ -374,12 +374,12 @@ Private Sub BuscoFacturas()
         Loop
         GrdModulos.SetFocus
     Else
-        lblestado.Caption = ""
+        lblEstado.Caption = ""
         Screen.MousePointer = vbNormal
         MsgBox "No se encontraron Facturas...", vbExclamation, TIT_MSGBOX
     End If
     rec.Close
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Screen.MousePointer = vbNormal
 End Sub
 
@@ -387,7 +387,7 @@ Private Sub cmdGrabar_Click()
     If MsgBox("¿Confirma Anular?", vbQuestion + vbYesNo, TIT_MSGBOX) = vbNo Then Exit Sub
     
     On Error GoTo SeClavo
-    lblestado.Caption = "Actualizando..."
+    lblEstado.Caption = "Actualizando..."
     Screen.MousePointer = vbHourglass
     DBConn.BeginTrans
         
@@ -415,14 +415,14 @@ Private Sub cmdGrabar_Click()
     End Select
     
     DBConn.CommitTrans
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Screen.MousePointer = vbNormal
     CmdNuevo_Click
     Exit Sub
 
 SeClavo:
     DBConn.RollbackTrans
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Screen.MousePointer = vbNormal
     MsgBox Err.Description, vbCritical, TIT_MSGBOX
 End Sub
@@ -536,7 +536,7 @@ Private Sub Form_Load()
             Call CambiColoryEstado(True)
             
     End Select
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
 End Sub
 
 Private Sub LlenarComboNotaDebito()
@@ -875,7 +875,7 @@ Public Sub BuscarClientes(Txt As Control, mQuien As String, Optional mCadena As 
 End Sub
 
 Private Sub BuscoRecibos()
-    lblestado.Caption = "Buscando Recibos..."
+    lblEstado.Caption = "Buscando Recibos..."
     Screen.MousePointer = vbHourglass
     
     sql = "SELECT RC.REC_NUMERO, RC.REC_SUCURSAL, RC.REC_FECHA,RC.REC_TOTAL,"
@@ -911,13 +911,13 @@ Private Sub BuscoRecibos()
         Loop
         GrdModulos.SetFocus
     Else
-        lblestado.Caption = ""
+        lblEstado.Caption = ""
         Screen.MousePointer = vbNormal
         MsgBox "No se encontraron Recibos...", vbExclamation, TIT_MSGBOX
         'chkCliente.SetFocus
     End If
     rec.Close
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Screen.MousePointer = vbNormal
 End Sub
 

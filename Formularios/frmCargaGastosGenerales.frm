@@ -56,8 +56,8 @@ Begin VB.Form frmCargaGastosGenerales
       TabCaption(1)   =   "&Buscar"
       TabPicture(1)   =   "frmCargaGastosGenerales.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "GrdModulos"
-      Tab(1).Control(1)=   "Frame4"
+      Tab(1).Control(0)=   "Frame4"
+      Tab(1).Control(1)=   "GrdModulos"
       Tab(1).ControlCount=   2
       Begin VB.Frame Frame4 
          Caption         =   "Buscar por..."
@@ -197,7 +197,7 @@ Begin VB.Form frmCargaGastosGenerales
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54460417
+            Format          =   54657025
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker FechaHasta 
@@ -211,7 +211,7 @@ Begin VB.Form frmCargaGastosGenerales
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54460417
+            Format          =   54657025
             CurrentDate     =   41098
          End
          Begin VB.Label Label9 
@@ -426,7 +426,7 @@ Begin VB.Form frmCargaGastosGenerales
             Caption         =   "A Favor"
             Height          =   210
             Left            =   6240
-            TabIndex        =   20
+            TabIndex        =   19
             Top             =   3840
             Visible         =   0   'False
             Width           =   855
@@ -674,7 +674,7 @@ Begin VB.Form frmCargaGastosGenerales
             Caption         =   "Genera Crédito Fiscal"
             Height          =   210
             Left            =   4125
-            TabIndex        =   19
+            TabIndex        =   18
             Top             =   3840
             Width           =   1815
          End
@@ -709,7 +709,7 @@ Begin VB.Form frmCargaGastosGenerales
             Height          =   300
             Left            =   1275
             MaxLength       =   40
-            TabIndex        =   18
+            TabIndex        =   21
             Text            =   "0,00"
             Top             =   4140
             Width           =   1500
@@ -754,13 +754,13 @@ Begin VB.Form frmCargaGastosGenerales
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54460417
+            Format          =   54657025
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker Periodo 
             Height          =   315
             Left            =   4125
-            TabIndex        =   21
+            TabIndex        =   20
             Top             =   4125
             Width           =   1500
             _ExtentX        =   2646
@@ -768,7 +768,7 @@ Begin VB.Form frmCargaGastosGenerales
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54460417
+            Format          =   54657025
             CurrentDate     =   41098
          End
          Begin VB.Label Label21 
@@ -1036,17 +1036,17 @@ End Sub
 
 Private Sub chkCreditoFiscal_Click()
     If chkCreditoFiscal.Value = Checked Then
-        Periodo.Enabled = True
+        'Periodo.Enabled = True
         chkFavor.Visible = True
     Else
-        Periodo.Enabled = False
+        'Periodo.Enabled = False
         chkFavor.Visible = False
     End If
 End Sub
 
 Private Sub chkCreditoFiscal_LostFocus()
     If tabDatos.Tab = 0 Then
-        If chkCreditoFiscal.Value = Unchecked Then cmdGrabar.SetFocus
+        'If chkCreditoFiscal.Value = Unchecked Then cmdGrabar.SetFocus
     End If
 End Sub
 
@@ -1095,7 +1095,7 @@ Private Sub CmdBorrar_Click()
     
     If MsgBox("¿Seguro que desea eliminar el Gasto?", vbQuestion + vbYesNo + vbDefaultButton2, TIT_MSGBOX) = vbYes Then
         On Error GoTo Seclavose
-         lblEstado.Caption = "Eliminando..."
+         lblestado.Caption = "Eliminando..."
          Screen.MousePointer = vbHourglass
          DBConn.BeginTrans
          
@@ -1108,7 +1108,7 @@ Private Sub CmdBorrar_Click()
          DBConn.Execute sql
                                         
          DBConn.CommitTrans
-         lblEstado.Caption = ""
+         lblestado.Caption = ""
          Screen.MousePointer = vbNormal
          CmdNuevo_Click
     End If
@@ -1117,7 +1117,7 @@ Private Sub CmdBorrar_Click()
 Seclavose:
     DBConn.RollbackTrans
     Screen.MousePointer = vbNormal
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     MsgBox Err.Description, vbCritical, TIT_MSGBOX
 End Sub
 
@@ -1251,7 +1251,7 @@ Private Sub cmdGrabar_Click()
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
 
     Screen.MousePointer = vbHourglass
-    lblEstado.Caption = "Guardando..."
+    lblestado.Caption = "Guardando..."
     
     If rec.EOF = False Then
         If MsgBox("El Comprobante ya fue ingresado!!!" & Chr(13) & _
@@ -1274,7 +1274,7 @@ Private Sub cmdGrabar_Click()
             sql = sql & ",GGR_PERIIBB=" & XN(Chk0(txtperIIBB))
             sql = sql & ",GGR_PERIVA=" & XN(Chk0(txtperIVA))
             sql = sql & ",GGR_PERGAN=" & XN(Chk0(txtperGAN))
-            sql = sql & ",GGR_TOTAL=" & XN(Chk0(txtTotal))
+            sql = sql & ",GGR_TOTAL=" & XN(Chk0(txttotal))
              If chkCreditoFiscal.Value = Checked Then
                 sql = sql & ",GGR_LIBROIVA= 'S'" 'ENTRA EN EL LIBRO DE IVA COMPRAS
             Else
@@ -1329,7 +1329,7 @@ Private Sub cmdGrabar_Click()
         sql = sql & XN(signo & Chk0(txtperIIBB)) & ","
         sql = sql & XN(signo & Chk0(txtperIVA)) & ","
         sql = sql & XN(signo & Chk0(txtperGAN)) & ","
-        sql = sql & XN(signo & txtTotal) & ","
+        sql = sql & XN(signo & txttotal) & ","
         If chkCreditoFiscal.Value = Checked Then
             sql = sql & "'S'," 'ENTRA EN EL LIBRO DE IVA COMPRAS
         Else
@@ -1346,7 +1346,7 @@ Private Sub cmdGrabar_Click()
         If cboCondicion.ItemData(cboCondicion.ListIndex) = 1 Then
             sql = sql & 0 & ","
         Else
-            sql = sql & XN(txtTotal) & ","
+            sql = sql & XN(txttotal) & ","
         End If
         sql = sql & XS(txtObservaciones.Text) & ","
         sql = sql & XS(txtgasoil.Text) & ","
@@ -1362,13 +1362,13 @@ Private Sub cmdGrabar_Click()
     rec.Close
         
     Screen.MousePointer = vbNormal
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     DBConn.CommitTrans
     CmdNuevo_Click
     Exit Sub
     
 HayErrorCarga:
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     Screen.MousePointer = vbNormal
     DBConn.RollbackTrans
     MsgBox Err.Description, vbCritical, TIT_MSGBOX
@@ -1424,9 +1424,9 @@ Private Function ValidarGastosGenerales() As Boolean
         ValidarGastosGenerales = False
         Exit Function
     End If
-    If txtTotal.Text = "" Then
+    If txttotal.Text = "" Then
         MsgBox "El Total del comprobante es requerido", vbExclamation, TIT_MSGBOX
-        txtTotal.SetFocus
+        txttotal.SetFocus
         ValidarGastosGenerales = False
         Exit Function
     End If
@@ -1467,7 +1467,7 @@ Private Sub limpiar_datos()
     txtperIIBB.Text = "0,00"
     txtperIVA.Text = "0,00"
     txtperGAN.Text = "0,00"
-    txtTotal.Text = "0,00"
+    txttotal.Text = "0,00"
     Periodo.Value = Null
     chkCreditoFiscal.Value = Unchecked
     cmdBorrar.Enabled = False
@@ -1580,14 +1580,14 @@ Private Sub Form_Load()
     tabDatos.Tab = 0
     cmdGrabar.Enabled = True
     cmdBorrar.Enabled = False
-    Periodo.Enabled = False
-    lblEstado.Caption = ""
+    'Periodo.Enabled = False
+    lblestado.Caption = ""
     txtNeto.Text = "0,00"
     txtNeto1.Text = "0,00"
     txtSubTotal.Text = "0,00"
     txtSubTotal1.Text = "0,00"
     txtImpuestos.Text = "0,00"
-    txtTotal.Text = "0,00"
+    txttotal.Text = "0,00"
 End Sub
 Private Sub LlenarComboFormaPago()
     sql = "SELECT * FROM FORMA_PAGO "
@@ -1693,8 +1693,7 @@ Private Sub GrdModulos_dblClick()
         
         If GrdModulos.TextMatrix(GrdModulos.RowSel, 16) = "S" Then
             chkCreditoFiscal.Value = Checked
-            Periodo.Value = GrdModulos.TextMatrix(GrdModulos.RowSel, 15)
-            Periodo_LostFocus
+            
             If Chk0(GrdModulos.TextMatrix(GrdModulos.RowSel, 25)) = 1 Then
                 chkFavor.Value = Checked
             End If
@@ -1702,6 +1701,8 @@ Private Sub GrdModulos_dblClick()
             chkCreditoFiscal.Value = Unchecked
             chkFavor.Value = Unchecked
         End If
+        Periodo.Value = GrdModulos.TextMatrix(GrdModulos.RowSel, 15)
+        Periodo_LostFocus
         'FrameProveedor.Enabled = False
         'cboComprobante.Enabled = False
         'pongo enable falso (los campos clave) ya que consulto
@@ -1904,8 +1905,8 @@ Private Sub txtImpuestos_LostFocus()
     End If
 End Sub
 Private Function SumaTotal()
-        txtTotal.Text = CDbl(txtImpuestos.Text) + CDbl(txtSubTotal.Text) + CDbl(txtSubTotal1.Text) + Chk0(txtperIIBB.Text) + Chk0(txtperIVA.Text) + Chk0(txtperGAN.Text)
-        txtTotal.Text = Valido_Importe2(txtTotal)
+        txttotal.Text = CDbl(txtImpuestos.Text) + CDbl(txtSubTotal.Text) + CDbl(txtSubTotal1.Text) + Chk0(txtperIIBB.Text) + Chk0(txtperIVA.Text) + Chk0(txtperGAN.Text)
+        txttotal.Text = Valido_Importe2(txttotal)
 End Function
 
 Private Sub txtIva_GotFocus()
@@ -1925,8 +1926,8 @@ Private Sub txtIva_LostFocus()
         txtimp1IVA.Text = Valido_Importe2((CDbl(txtNeto.Text) * CDbl(txtIva.Text)) / 100)
         txtSubTotal.Text = CDbl(txtNeto.Text) + ((CDbl(txtNeto.Text) * CDbl(txtIva.Text)) / 100)
         txtSubTotal.Text = Valido_Importe2(txtSubTotal)
-        txtTotal.Text = CDbl(txtSubTotal1.Text) + CDbl(txtSubTotal.Text) + CDbl(txtImpuestos.Text)
-        txtTotal.Text = Valido_Importe2(txtTotal)
+        txttotal.Text = CDbl(txtSubTotal1.Text) + CDbl(txtSubTotal.Text) + CDbl(txtImpuestos.Text)
+        txttotal.Text = Valido_Importe2(txttotal)
     End If
 End Sub
 
@@ -1947,8 +1948,8 @@ Private Sub txtIva1_LostFocus()
         txtimp2IVA.Text = Valido_Importe2((CDbl(txtNeto1.Text) * CDbl(txtIva1.Text)) / 100)
         txtSubTotal1.Text = CDbl(txtNeto1.Text) + ((CDbl(txtNeto1.Text) * CDbl(txtIva1.Text)) / 100)
         txtSubTotal1.Text = Valido_Importe2(txtSubTotal1)
-        txtTotal.Text = CDbl(txtSubTotal1.Text) + CDbl(txtSubTotal.Text) + CDbl(txtImpuestos.Text)
-        txtTotal.Text = Valido_Importe2(txtTotal)
+        txttotal.Text = CDbl(txtSubTotal1.Text) + CDbl(txtSubTotal.Text) + CDbl(txtImpuestos.Text)
+        txttotal.Text = Valido_Importe2(txttotal)
     End If
 End Sub
 
@@ -2184,17 +2185,17 @@ Private Function BuscoProveedor(Pro As String) As String
 End Function
 
 Private Sub txtTotal_GotFocus()
-    SelecTexto txtTotal
+    SelecTexto txttotal
 End Sub
 
 Private Sub txtTotal_KeyPress(KeyAscii As Integer)
-    KeyAscii = CarNumeroDecimal(txtTotal, KeyAscii)
+    KeyAscii = CarNumeroDecimal(txttotal, KeyAscii)
 End Sub
 
 Private Sub txtTotal_LostFocus()
-    If txtTotal.Text <> "" Then
-        txtTotal.Text = Valido_Importe2(txtTotal)
+    If txttotal.Text <> "" Then
+        txttotal.Text = Valido_Importe2(txttotal)
     Else
-        txtTotal.Text = "0,00"
+        txttotal.Text = "0,00"
     End If
 End Sub

@@ -6,7 +6,7 @@ Begin VB.Form ABMProveedor
    ClientHeight    =   5505
    ClientLeft      =   2700
    ClientTop       =   2625
-   ClientWidth     =   4965
+   ClientWidth     =   5010
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -23,7 +23,7 @@ Begin VB.Form ABMProveedor
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   5505
-   ScaleWidth      =   4965
+   ScaleWidth      =   5010
    ShowInTaskbar   =   0   'False
    Begin VB.TextBox txtNomFant 
       Height          =   315
@@ -31,7 +31,7 @@ Begin VB.Form ABMProveedor
       MaxLength       =   50
       TabIndex        =   3
       Top             =   1320
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.CommandButton Command1 
       Caption         =   "Command1"
@@ -50,15 +50,15 @@ Begin VB.Form ABMProveedor
       Style           =   2  'Dropdown List
       TabIndex        =   0
       Top             =   195
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.TextBox txtIngresosBrutos 
       Height          =   315
       Left            =   3780
-      MaxLength       =   10
+      MaxLength       =   11
       TabIndex        =   6
       Top             =   2040
-      Width           =   1005
+      Width           =   1125
    End
    Begin MSMask.MaskEdBox txtCuit 
       Height          =   315
@@ -82,7 +82,7 @@ Begin VB.Form ABMProveedor
       Style           =   2  'Dropdown List
       TabIndex        =   4
       Top             =   1695
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.TextBox txtDomicilio 
       Height          =   315
@@ -90,7 +90,7 @@ Begin VB.Form ABMProveedor
       MaxLength       =   50
       TabIndex        =   10
       Top             =   3540
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.TextBox txtMail 
       Height          =   315
@@ -98,7 +98,7 @@ Begin VB.Form ABMProveedor
       MaxLength       =   50
       TabIndex        =   13
       Top             =   4650
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.TextBox txtFax 
       Height          =   315
@@ -106,7 +106,7 @@ Begin VB.Form ABMProveedor
       MaxLength       =   30
       TabIndex        =   12
       Top             =   4320
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.TextBox txtTelefono 
       Height          =   315
@@ -114,7 +114,7 @@ Begin VB.Form ABMProveedor
       MaxLength       =   30
       TabIndex        =   11
       Top             =   3990
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.ComboBox cboLocalidad 
       Height          =   315
@@ -124,7 +124,7 @@ Begin VB.Form ABMProveedor
       Style           =   2  'Dropdown List
       TabIndex        =   9
       Top             =   3195
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.ComboBox cboProvincia 
       Height          =   315
@@ -134,7 +134,7 @@ Begin VB.Form ABMProveedor
       Style           =   2  'Dropdown List
       TabIndex        =   8
       Top             =   2850
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.ComboBox cboPais 
       Height          =   315
@@ -144,7 +144,7 @@ Begin VB.Form ABMProveedor
       Style           =   2  'Dropdown List
       TabIndex        =   7
       Top             =   2505
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.CommandButton cmdAyuda 
       Height          =   315
@@ -161,7 +161,7 @@ Begin VB.Form ABMProveedor
       MaxLength       =   50
       TabIndex        =   2
       Top             =   885
-      Width           =   3375
+      Width           =   3495
    End
    Begin VB.TextBox txtID 
       Height          =   315
@@ -372,7 +372,7 @@ Function ActualizarListaBase(pMode As Integer)
     End If
     
     If pMode = 4 Then
-        vListView.ListItems.Remove vListView.SelectedItem.Index
+        vListView.ListItems.Remove vListView.SelectedItem.index
         Exit Function
     End If
     

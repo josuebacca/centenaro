@@ -197,7 +197,7 @@ Begin VB.Form frmLibroCompras2
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   21037057
+         Format          =   54198273
          CurrentDate     =   41098
       End
       Begin MSComCtl2.DTPicker FechaHasta 
@@ -211,7 +211,7 @@ Begin VB.Form frmLibroCompras2
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   21037057
+         Format          =   54198273
          CurrentDate     =   41098
       End
       Begin VB.Label Label1 
@@ -516,7 +516,7 @@ Private Sub ArmarListado(Numero)
      On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      DBConn.BeginTrans
-     lblEstado.Caption = "Buscando Datos..."
+     lblestado.Caption = "Buscando Datos..."
      
     If Numero = 0 Then
         'BORRO LA TABLA TMP_LIBRO_IVA_COMPRAS
@@ -555,8 +555,8 @@ Private Sub ArmarListado(Numero)
         If Numero = 6 Then
             sql = sql & " AND GG.GGR_FAVOR<>1" '2-no IVA (no incluye ningun favor)
             sql = sql & " AND GG.GGR_LIBROIVA = " & XS("N")
-            If FechaDesde <> "" Then sql = sql & " AND GG.GGR_FECHACOMP>=" & XDQ(FechaDesde)
-            If FechaHasta <> "" Then sql = sql & " AND GG.GGR_FECHACOMP<=" & XDQ(FechaHasta)
+            If FechaDesde <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP >=" & XDQ(FechaDesde) & " OR GG.GGR_PERIODO >=" & XDQ(FechaDesde) & " )"
+            If FechaHasta <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP<=" & XDQ(FechaHasta) & " OR GG.GGR_PERIODO <=" & XDQ(FechaHasta) & " )"
         End If
     End If
     If Numero = 4 Then
@@ -617,14 +617,14 @@ Private Sub ArmarListado(Numero)
     End If
     rec.Close
 
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     DBConn.CommitTrans
     Screen.MousePointer = vbNormal
     Exit Sub
 
 CLAVO:
  Screen.MousePointer = vbNormal
- lblEstado.Caption = ""
+ lblestado.Caption = ""
  DBConn.RollbackTrans
  If rec.State = 1 Then rec.Close
  MsgBox Err.Description, vbCritical, TIT_MSGBOX
@@ -701,59 +701,59 @@ Private Sub cmdAceptar_Click()
     
 End Sub
 Private Function ListarObs(Numero As Integer)
-    lblEstado.Caption = "Buscando Listado..."
-    rep(Numero).WindowState = crptMaximized
-    rep(Numero).WindowBorderStyle = crptNoBorder
-    rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
-    rep(Numero).Formulas(0) = ""
-    rep(Numero).Formulas(1) = ""
-    rep(Numero).Formulas(2) = ""
-    rep(Numero).Formulas(3) = ""
+    lblestado.Caption = "Buscando Listado..."
+    Rep(Numero).WindowState = crptMaximized
+    Rep(Numero).WindowBorderStyle = crptNoBorder
+    Rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
+    Rep(Numero).Formulas(0) = ""
+    Rep(Numero).Formulas(1) = ""
+    Rep(Numero).Formulas(2) = ""
+    Rep(Numero).Formulas(3) = ""
         
     sql = "SELECT CUIT,ING_BRUTOS,RAZ_SOCIAL,DIRECCION,TELEFONO FROM PARAMETROS"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
     If rec.EOF = False Then
-        rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
-        rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
-        rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
+        Rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
+        Rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
+        Rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
     End If
     rec.Close
     
     If FechaDesde.Value <> "" And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf FechaDesde.Value <> "" And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
     ElseIf IsNull(FechaDesde.Value) And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf IsNull(FechaDesde.Value) And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
     End If
     
     If Numero = 5 Then
-        rep(Numero).WindowTitle = "Libro Compras con Observaciones - IVA"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_obs.rpt"
+        Rep(Numero).WindowTitle = "Libro Compras con Observaciones - IVA"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_obs.rpt"
     Else
         If Numero = 10 Then
-            rep(Numero).WindowTitle = "Libro Compras con Observaciones - NO IVA"
-            rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibro_NO_ivacompras_obs.rpt"
+            Rep(Numero).WindowTitle = "Libro Compras con Observaciones - NO IVA"
+            Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibro_NO_ivacompras_obs.rpt"
         End If
     End If
        
     
     
     If optPantalla.Value = True Then
-        rep(Numero).Destination = crptToWindow
+        Rep(Numero).Destination = crptToWindow
     ElseIf optImpresora.Value = True Then
-        rep(Numero).Destination = crptToPrinter
+        Rep(Numero).Destination = crptToPrinter
     End If
         
-     rep(Numero).Action = 1
+     Rep(Numero).Action = 1
      
      
-     lblEstado.Caption = ""
-     rep(Numero).Formulas(0) = ""
-     rep(Numero).Formulas(1) = ""
-     rep(Numero).Formulas(3) = ""
+     lblestado.Caption = ""
+     Rep(Numero).Formulas(0) = ""
+     Rep(Numero).Formulas(1) = ""
+     Rep(Numero).Formulas(3) = ""
      
 End Function
 Private Sub ArmarListObs(Numero As Integer)
@@ -775,7 +775,7 @@ Private Sub ArmarListObs(Numero As Integer)
      On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      DBConn.BeginTrans
-     lblEstado.Caption = "Buscando Datos..."
+     lblestado.Caption = "Buscando Datos..."
      
      If Numero = 5 Then
         Tabla = "TMP_LIBRO_IVA_COMPRAS_OBS"
@@ -804,8 +804,8 @@ Private Sub ArmarListObs(Numero As Integer)
     Else
     'Libro de Observaciones NO IVA - numero = 10
         sql = sql & " AND GG.GGR_LIBROIVA = " & XS("N")
-        If FechaDesde <> "" Then sql = sql & " AND GG.GGR_FECHACOMP>=" & XDQ(FechaDesde)
-        If FechaHasta <> "" Then sql = sql & " AND GG.GGR_FECHACOMP<=" & XDQ(FechaHasta)
+        If FechaDesde <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP >=" & XDQ(FechaDesde) & " OR GG.GGR_PERIODO >=" & XDQ(FechaDesde) & " )"
+        If FechaHasta <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP<=" & XDQ(FechaHasta) & " OR GG.GGR_PERIODO <=" & XDQ(FechaHasta) & " )"
     End If
 
     sql = sql & " ORDER BY GG.GGR_FECHACOMP"
@@ -836,69 +836,69 @@ Private Sub ArmarListObs(Numero As Integer)
     End If
     rec.Close
     
-lblEstado.Caption = ""
+lblestado.Caption = ""
 DBConn.CommitTrans
 Screen.MousePointer = vbNormal
 Exit Sub
 
 CLAVO:
  Screen.MousePointer = vbNormal
- lblEstado.Caption = ""
+ lblestado.Caption = ""
  DBConn.RollbackTrans
  If rec.State = 1 Then rec.Close
  MsgBox Err.Description, vbCritical, TIT_MSGBOX
 End Sub
 
 Private Sub ListarConcepto(Numero As Integer)
-    lblEstado.Caption = "Buscando Listado..."
-    rep(Numero).WindowState = crptMaximized
-    rep(Numero).WindowBorderStyle = crptNoBorder
-    rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
-    rep(Numero).Formulas(0) = ""
-    rep(Numero).Formulas(1) = ""
-    rep(Numero).Formulas(2) = ""
+    lblestado.Caption = "Buscando Listado..."
+    Rep(Numero).WindowState = crptMaximized
+    Rep(Numero).WindowBorderStyle = crptNoBorder
+    Rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
+    Rep(Numero).Formulas(0) = ""
+    Rep(Numero).Formulas(1) = ""
+    Rep(Numero).Formulas(2) = ""
     'rep(Numero).Formulas(3) = ""
         
     sql = "SELECT CUIT,ING_BRUTOS,RAZ_SOCIAL,DIRECCION,TELEFONO FROM PARAMETROS"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
     If rec.EOF = False Then
-        rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
-        rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
-        rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
+        Rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
+        Rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
+        Rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
     End If
     rec.Close
     
     If FechaDesde.Value <> "" And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf FechaDesde.Value <> "" And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
     ElseIf IsNull(FechaDesde.Value) And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf IsNull(FechaDesde.Value) And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
     End If
     
     If Numero = 8 Then
-        rep(Numero).WindowTitle = "Informe de Proveedores por Concepto"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptcompras_conceptos_prov.rpt"
+        Rep(Numero).WindowTitle = "Informe de Proveedores por Concepto"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptcompras_conceptos_prov.rpt"
     End If
     If Numero = 9 Then
-        rep(Numero).WindowTitle = "Informe a favor por Concepto"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptcompras_FAVOR_conceptos_prov.rpt"
+        Rep(Numero).WindowTitle = "Informe a favor por Concepto"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptcompras_FAVOR_conceptos_prov.rpt"
     End If
      
     
     If optPantalla.Value = True Then
-        rep(Numero).Destination = crptToWindow
+        Rep(Numero).Destination = crptToWindow
     ElseIf optImpresora.Value = True Then
-        rep(Numero).Destination = crptToPrinter
+        Rep(Numero).Destination = crptToPrinter
     End If
-     rep(Numero).Action = 1
+     Rep(Numero).Action = 1
      
-     lblEstado.Caption = ""
-     rep(Numero).Formulas(0) = ""
-     rep(Numero).Formulas(1) = ""
-     rep(Numero).Formulas(2) = ""
+     lblestado.Caption = ""
+     Rep(Numero).Formulas(0) = ""
+     Rep(Numero).Formulas(1) = ""
+     Rep(Numero).Formulas(2) = ""
      'rep(Numero).Formulas(3) = ""
 End Sub
 Private Sub InformeFavorProvConcepto(Numero As Integer)
@@ -906,7 +906,7 @@ Private Sub InformeFavorProvConcepto(Numero As Integer)
 On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      DBConn.BeginTrans
-     lblEstado.Caption = "Buscando Datos..."
+     lblestado.Caption = "Buscando Datos..."
 
         If Numero = 8 Then
             Tabla = "TMP_LIBRO_IVA_COMPRAS_CONCEPTO"
@@ -993,8 +993,8 @@ On Error GoTo CLAVO
             End If
         End If
         sql = sql & " AND GG.GGR_LIBROIVA = " & XS("N")
-        If FechaDesde <> "" Then sql = sql & " AND GG.GGR_FECHACOMP>=" & XDQ(FechaDesde)
-        If FechaHasta <> "" Then sql = sql & " AND GG.GGR_FECHACOMP<=" & XDQ(FechaHasta)
+        If FechaDesde <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP >=" & XDQ(FechaDesde) & " OR GG.GGR_PERIODO >=" & XDQ(FechaDesde) & " )"
+        If FechaHasta <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP<=" & XDQ(FechaHasta) & " OR GG.GGR_PERIODO <=" & XDQ(FechaHasta) & " )"
         
         sql = sql & " GROUP BY TG.TGT_DESCRI,GG.GGR_IVA,GG.GGR_IVA1"
         sql = sql & " ORDER BY TG.TGT_DESCRI"
@@ -1039,14 +1039,14 @@ On Error GoTo CLAVO
         End If
         rec.Close
 
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     DBConn.CommitTrans
     Screen.MousePointer = vbNormal
     Exit Sub
 
 CLAVO:
  Screen.MousePointer = vbNormal
- lblEstado.Caption = ""
+ lblestado.Caption = ""
  DBConn.RollbackTrans
  If rec.State = 1 Then rec.Close
  MsgBox Err.Description, vbCritical, TIT_MSGBOX
@@ -1058,7 +1058,7 @@ Private Sub InformeFavor()
 On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      DBConn.BeginTrans
-     lblEstado.Caption = "Buscando Datos..."
+     lblestado.Caption = "Buscando Datos..."
 
 
         'BORRO LA TABLA TMP_LIBRO_IVA_COMPRAS
@@ -1122,14 +1122,14 @@ On Error GoTo CLAVO
         rec.Close
 
 
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     DBConn.CommitTrans
     Screen.MousePointer = vbNormal
     Exit Sub
 
 CLAVO:
  Screen.MousePointer = vbNormal
- lblEstado.Caption = ""
+ lblestado.Caption = ""
  DBConn.RollbackTrans
  If rec.State = 1 Then rec.Close
  MsgBox Err.Description, vbCritical, TIT_MSGBOX
@@ -1138,7 +1138,7 @@ Private Sub InformeProveedor()
 On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      DBConn.BeginTrans
-     lblEstado.Caption = "Buscando Datos..."
+     lblestado.Caption = "Buscando Datos..."
 
 
             'BORRO LA TABLA TMP_LIBRO_IVA_COMPRAS
@@ -1211,8 +1211,8 @@ On Error GoTo CLAVO
         sql = sql & " AND P.TPR_CODIGO=TP.TPR_CODIGO"
         sql = sql & " AND GG.GGR_FAVOR=0" ' NORMAL
         sql = sql & " AND GG.GGR_LIBROIVA=" & XS("N")
-        If FechaDesde <> "" Then sql = sql & " AND GG.GGR_FECHACOMP>=" & XDQ(FechaDesde)
-        If FechaHasta <> "" Then sql = sql & " AND GG.GGR_FECHACOMP<=" & XDQ(FechaHasta)
+        If FechaDesde <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP >=" & XDQ(FechaDesde) & " OR GG.GGR_PERIODO >=" & XDQ(FechaDesde) & " )"
+        If FechaHasta <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP<=" & XDQ(FechaHasta) & " OR GG.GGR_PERIODO <=" & XDQ(FechaHasta) & " )"
         sql = sql & " GROUP BY P.PROV_RAZSOC,P.PROV_FANTASIA,GG.GGR_IVA,GG.GGR_IVA1"
         sql = sql & " ORDER BY P.PROV_RAZSOC"
             
@@ -1258,14 +1258,14 @@ On Error GoTo CLAVO
         rec.Close
 
 
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     DBConn.CommitTrans
     Screen.MousePointer = vbNormal
     Exit Sub
 
 CLAVO:
  Screen.MousePointer = vbNormal
- lblEstado.Caption = ""
+ lblestado.Caption = ""
  DBConn.RollbackTrans
  If rec.State = 1 Then rec.Close
  MsgBox Err.Description, vbCritical, TIT_MSGBOX
@@ -1275,7 +1275,7 @@ Private Sub InformeConcepto(Numero As Integer)
      On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      DBConn.BeginTrans
-     lblEstado.Caption = "Buscando Datos..."
+     lblestado.Caption = "Buscando Datos..."
         
         If Numero = 1 Then
             Tabla = "TMP_LIBRO_IVA_COMPRAS_CONCEPTO"
@@ -1304,8 +1304,8 @@ Private Sub InformeConcepto(Numero As Integer)
             If Numero = 7 Then
                 sql = sql & " AND GG.GGR_FAVOR<>1" '2-no IVA (no incluye ningun favor)
                 sql = sql & " AND GG.GGR_LIBROIVA = " & XS("N")
-                If FechaDesde <> "" Then sql = sql & " AND GG.GGR_FECHACOMP>=" & XDQ(FechaDesde)
-                If FechaHasta <> "" Then sql = sql & " AND GG.GGR_FECHACOMP<=" & XDQ(FechaHasta)
+                If FechaDesde <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP >=" & XDQ(FechaDesde) & " OR GG.GGR_PERIODO >=" & XDQ(FechaDesde) & " )"
+                If FechaHasta <> "" Then sql = sql & " AND (GG.GGR_FECHACOMP<=" & XDQ(FechaHasta) & " OR GG.GGR_PERIODO <=" & XDQ(FechaHasta) & " )"
             End If
         End If
         
@@ -1352,14 +1352,14 @@ Private Sub InformeConcepto(Numero As Integer)
         End If
         rec.Close
      
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     DBConn.CommitTrans
     Screen.MousePointer = vbNormal
     Exit Sub
 
 CLAVO:
  Screen.MousePointer = vbNormal
- lblEstado.Caption = ""
+ lblestado.Caption = ""
  DBConn.RollbackTrans
  If rec.State = 1 Then rec.Close
  MsgBox Err.Description, vbCritical, TIT_MSGBOX
@@ -1367,151 +1367,151 @@ End Sub
 
 
 Private Sub ListarLibroIVA(Numero As Integer)
-    lblEstado.Caption = "Buscando Listado..."
-    rep(Numero).WindowState = crptMaximized
-    rep(Numero).WindowBorderStyle = crptNoBorder
-    rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
-    rep(Numero).Formulas(0) = ""
-    rep(Numero).Formulas(1) = ""
-    rep(Numero).Formulas(2) = ""
-    rep(Numero).Formulas(3) = ""
+    lblestado.Caption = "Buscando Listado..."
+    Rep(Numero).WindowState = crptMaximized
+    Rep(Numero).WindowBorderStyle = crptNoBorder
+    Rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
+    Rep(Numero).Formulas(0) = ""
+    Rep(Numero).Formulas(1) = ""
+    Rep(Numero).Formulas(2) = ""
+    Rep(Numero).Formulas(3) = ""
         
     sql = "SELECT CUIT,ING_BRUTOS,RAZ_SOCIAL,DIRECCION,TELEFONO FROM PARAMETROS"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
     If rec.EOF = False Then
-        rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
-        rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
-        rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
+        Rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
+        Rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
+        Rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
     End If
     rec.Close
     
     If FechaDesde.Value <> "" And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf FechaDesde.Value <> "" And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
     ElseIf IsNull(FechaDesde.Value) And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf IsNull(FechaDesde.Value) And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
     End If
     
     If Numero = 0 Then
-        rep(Numero).WindowTitle = "Libro I.V.A. Compras"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras.rpt"
+        Rep(Numero).WindowTitle = "Libro I.V.A. Compras"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras.rpt"
     End If
     If Numero = 4 Then
-        rep(Numero).WindowTitle = "Libro I.V.A. Compras - COMBUSTIBLES"
+        Rep(Numero).WindowTitle = "Libro I.V.A. Compras - COMBUSTIBLES"
         'rep(Numero).Formulas(0) = ""
         'rep(Numero).Formulas(1) = ""
         'rep(Numero).Formulas(2) = ""
         'rep(Numero).Formulas(3) = ""
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_combustibles.rpt"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_combustibles.rpt"
     End If
     If Numero = 6 Then
-        rep(Numero).WindowTitle = "Libro I.V.A. Compras - NO INCLUIDAS"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibro_NO_ivacompras.rpt"
+        Rep(Numero).WindowTitle = "Libro I.V.A. Compras - NO INCLUIDAS"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibro_NO_ivacompras.rpt"
     End If
     
     If optPantalla.Value = True Then
-        rep(Numero).Destination = crptToWindow
+        Rep(Numero).Destination = crptToWindow
     ElseIf optImpresora.Value = True Then
-        rep(Numero).Destination = crptToPrinter
+        Rep(Numero).Destination = crptToPrinter
     End If
-     rep(Numero).Action = 1
+     Rep(Numero).Action = 1
      
-     lblEstado.Caption = ""
-     rep(Numero).Formulas(0) = ""
-     rep(Numero).Formulas(1) = ""
-     rep(Numero).Formulas(2) = ""
-     rep(Numero).Formulas(3) = ""
+     lblestado.Caption = ""
+     Rep(Numero).Formulas(0) = ""
+     Rep(Numero).Formulas(1) = ""
+     Rep(Numero).Formulas(2) = ""
+     Rep(Numero).Formulas(3) = ""
 End Sub
 Private Sub ListarLibroIVA_Combustibles(Numero As Integer)
-    lblEstado.Caption = "Buscando Listado..."
-    rep(Numero).WindowState = crptMaximized
-    rep(Numero).WindowBorderStyle = crptNoBorder
-    rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
-    rep(Numero).Formulas(0) = ""
-    rep(Numero).Formulas(1) = ""
-    rep(Numero).Formulas(2) = ""
-    rep(Numero).Formulas(3) = ""
+    lblestado.Caption = "Buscando Listado..."
+    Rep(Numero).WindowState = crptMaximized
+    Rep(Numero).WindowBorderStyle = crptNoBorder
+    Rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
+    Rep(Numero).Formulas(0) = ""
+    Rep(Numero).Formulas(1) = ""
+    Rep(Numero).Formulas(2) = ""
+    Rep(Numero).Formulas(3) = ""
         
     sql = "SELECT CUIT,ING_BRUTOS,RAZ_SOCIAL,DIRECCION,TELEFONO FROM PARAMETROS"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
     If rec.EOF = False Then
-        rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
-        rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
-        rep(Numero).Formulas(2) = "INGBRUTOS='" & "Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
+        Rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
+        Rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
+        Rep(Numero).Formulas(2) = "INGBRUTOS='" & "Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
     End If
     rec.Close
     
     If FechaDesde.Value <> "" And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf FechaDesde.Value <> "" And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
     ElseIf IsNull(FechaDesde.Value) And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf IsNull(FechaDesde.Value) And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
     End If
     
     If Numero = 4 Then
-        rep(Numero).WindowTitle = "Libro I.V.A. Compras - COMBUSTIBLES"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_combustibles.rpt"
+        Rep(Numero).WindowTitle = "Libro I.V.A. Compras - COMBUSTIBLES"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_combustibles.rpt"
     End If
     
     If optPantalla.Value = True Then
-        rep(Numero).Destination = crptToWindow
+        Rep(Numero).Destination = crptToWindow
     ElseIf optImpresora.Value = True Then
-        rep(Numero).Destination = crptToPrinter
+        Rep(Numero).Destination = crptToPrinter
     End If
-     rep(Numero).Action = 1
+     Rep(Numero).Action = 1
      
-     lblEstado.Caption = ""
-     rep(Numero).Formulas(0) = ""
-     rep(Numero).Formulas(1) = ""
-     rep(Numero).Formulas(2) = ""
-     rep(Numero).Formulas(3) = ""
+     lblestado.Caption = ""
+     Rep(Numero).Formulas(0) = ""
+     Rep(Numero).Formulas(1) = ""
+     Rep(Numero).Formulas(2) = ""
+     Rep(Numero).Formulas(3) = ""
      
 End Sub
 Private Sub ListarProveedor(Numero As Integer)
-    lblEstado.Caption = "Buscando Listado..."
-    rep(Numero).WindowState = crptMaximized
-    rep(Numero).WindowBorderStyle = crptNoBorder
-    rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
-    rep(Numero).Formulas(0) = ""
-    rep(Numero).Formulas(1) = ""
-    rep(Numero).Formulas(2) = ""
-    rep(Numero).Formulas(3) = ""
-    rep(Numero).Formulas(4) = ""
+    lblestado.Caption = "Buscando Listado..."
+    Rep(Numero).WindowState = crptMaximized
+    Rep(Numero).WindowBorderStyle = crptNoBorder
+    Rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
+    Rep(Numero).Formulas(0) = ""
+    Rep(Numero).Formulas(1) = ""
+    Rep(Numero).Formulas(2) = ""
+    Rep(Numero).Formulas(3) = ""
+    Rep(Numero).Formulas(4) = ""
         
     sql = "SELECT CUIT,ING_BRUTOS,RAZ_SOCIAL,DIRECCION,TELEFONO FROM PARAMETROS"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
     If rec.EOF = False Then
-        rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
-        rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
-        rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
+        Rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
+        Rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
+        Rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
     End If
     rec.Close
     
     If FechaDesde.Value <> "" And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf FechaDesde.Value <> "" And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
     ElseIf IsNull(FechaDesde.Value) And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf IsNull(FechaDesde.Value) And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
     End If
     
     If Numero = 2 Then
-        rep(Numero).WindowTitle = "Informe de Compras por Proveedor"
-        rep(Numero).Formulas(4) = "TIPO='" & "FAVOR" & "'"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_proveedor.rpt"
+        Rep(Numero).WindowTitle = "Informe de Compras por Proveedor"
+        Rep(Numero).Formulas(4) = "TIPO='" & "FAVOR" & "'"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_proveedor.rpt"
     Else
         If Numero = 3 Then
-            rep(Numero).WindowTitle = "Informe de Favor por Proveedor"
-            rep(Numero).Formulas(4) = "TIPO='" & "NORMAL" & "'"
-            rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_FAVOR_proveedor.rpt"
+            Rep(Numero).WindowTitle = "Informe de Favor por Proveedor"
+            Rep(Numero).Formulas(4) = "TIPO='" & "NORMAL" & "'"
+            Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_FAVOR_proveedor.rpt"
         End If
     End If
     'If chkResumen Then
@@ -1523,70 +1523,70 @@ Private Sub ListarProveedor(Numero As Integer)
     
     
     If optPantalla.Value = True Then
-        rep(Numero).Destination = crptToWindow
+        Rep(Numero).Destination = crptToWindow
     ElseIf optImpresora.Value = True Then
-        rep(Numero).Destination = crptToPrinter
+        Rep(Numero).Destination = crptToPrinter
     End If
-     rep(Numero).Action = 1
+     Rep(Numero).Action = 1
      
-     lblEstado.Caption = ""
-     rep(Numero).Formulas(0) = ""
-     rep(Numero).Formulas(1) = ""
-     rep(Numero).Formulas(3) = ""
+     lblestado.Caption = ""
+     Rep(Numero).Formulas(0) = ""
+     Rep(Numero).Formulas(1) = ""
+     Rep(Numero).Formulas(3) = ""
 
 End Sub
 Private Sub ListarResumenIVA(Numero As Integer)
-    lblEstado.Caption = "Buscando Listado..."
-    rep(Numero).WindowState = crptMaximized
-    rep(Numero).WindowBorderStyle = crptNoBorder
-    rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
-    rep(Numero).Formulas(0) = ""
-    rep(Numero).Formulas(1) = ""
-    rep(Numero).Formulas(2) = ""
+    lblestado.Caption = "Buscando Listado..."
+    Rep(Numero).WindowState = crptMaximized
+    Rep(Numero).WindowBorderStyle = crptNoBorder
+    Rep(Numero).Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=CENTENARO"
+    Rep(Numero).Formulas(0) = ""
+    Rep(Numero).Formulas(1) = ""
+    Rep(Numero).Formulas(2) = ""
     'rep(Numero).Formulas(3) = ""
         
     sql = "SELECT CUIT,ING_BRUTOS,RAZ_SOCIAL,DIRECCION,TELEFONO FROM PARAMETROS"
     rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
     If rec.EOF = False Then
-        rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
-        rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
-        rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
+        Rep(Numero).Formulas(0) = "EMPRESA='" & Trim(rec!RAZ_SOCIAL) & "'"
+        Rep(Numero).Formulas(1) = "CUIT='" & Trim(rec!DIRECCION) & " - " & Trim(rec!TELEFONO) & " - " & Format(rec!cuit, "##-########-#") & "'"
+        Rep(Numero).Formulas(2) = "INGBRUTOS='Ing. Brutos:  " & Format(rec!ING_BRUTOS, "###-#####-##") & "'"
     End If
     rec.Close
     
     If FechaDesde.Value <> "" And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf FechaDesde.Value <> "" And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: " & FechaDesde.Value & "   Hasta: " & Date & "'"
     ElseIf IsNull(FechaDesde.Value) And Not IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & FechaHasta.Value & "'"
     ElseIf IsNull(FechaDesde.Value) And IsNull(FechaHasta.Value) Then
-        rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
+        Rep(Numero).Formulas(3) = "FECHA='" & "Desde: Inicio" & "   Hasta: " & Date & "'"
     End If
     
     If Numero = 1 Then
-        rep(Numero).WindowTitle = "Informe por Concepto I.V.A. Compras"
-        rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_conceptos.rpt"
+        Rep(Numero).WindowTitle = "Informe por Concepto I.V.A. Compras"
+        Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibroivacompras_conceptos.rpt"
     Else
         If Numero = 7 Then
-            rep(Numero).WindowTitle = "NO - Informe por Concepto I.V.A. Compras"
-            rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibro_NO_ivacompras_conceptos.rpt"
+            Rep(Numero).WindowTitle = "NO - Informe por Concepto I.V.A. Compras"
+            Rep(Numero).ReportFileName = DRIVE & DirReport & "rptlibro_NO_ivacompras_conceptos.rpt"
         End If
     End If
     
     
     
     If optPantalla.Value = True Then
-        rep(Numero).Destination = crptToWindow
+        Rep(Numero).Destination = crptToWindow
     ElseIf optImpresora.Value = True Then
-        rep(Numero).Destination = crptToPrinter
+        Rep(Numero).Destination = crptToPrinter
     End If
-     rep(Numero).Action = 1
+     Rep(Numero).Action = 1
      
-     lblEstado.Caption = ""
-     rep(Numero).Formulas(0) = ""
-     rep(Numero).Formulas(1) = ""
-     rep(Numero).Formulas(2) = ""
+     lblestado.Caption = ""
+     Rep(Numero).Formulas(0) = ""
+     Rep(Numero).Formulas(1) = ""
+     Rep(Numero).Formulas(2) = ""
      'rep(Numero).Formulas(3) = ""
      
 End Sub
@@ -1614,7 +1614,7 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub Form_Load()
-    lblEstado.Caption = ""
+    lblestado.Caption = ""
     lblPor.Caption = "100 %"
     Call Centrar_pantalla(Me)
     Set rec = New ADODB.Recordset

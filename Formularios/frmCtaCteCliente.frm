@@ -248,7 +248,7 @@ Begin VB.Form frmCtaCteCliente
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   51970049
+         Format          =   55050241
          CurrentDate     =   41098
       End
       Begin VB.CommandButton cmdAgregar 
@@ -338,7 +338,7 @@ Begin VB.Form frmCtaCteCliente
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   51970049
+         Format          =   55050241
          CurrentDate     =   41098
       End
       Begin VB.Label Label1 
@@ -494,7 +494,7 @@ Begin VB.Form frmCtaCteCliente
       Width           =   7890
       Begin VB.TextBox txtCliente 
          Height          =   315
-         Left            =   1620
+         Left            =   1260
          MaxLength       =   40
          TabIndex        =   0
          Top             =   345
@@ -511,16 +511,16 @@ Begin VB.Form frmCtaCteCliente
             Strikethrough   =   0   'False
          EndProperty
          Height          =   315
-         Left            =   2370
+         Left            =   2010
          MaxLength       =   50
          TabIndex        =   1
          Tag             =   "Descripción"
          Top             =   345
-         Width           =   4575
+         Width           =   5775
       End
       Begin MSComCtl2.DTPicker FechaDesde 
          Height          =   315
-         Left            =   1620
+         Left            =   1260
          TabIndex        =   2
          Top             =   720
          Width           =   1455
@@ -529,12 +529,12 @@ Begin VB.Form frmCtaCteCliente
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   51970049
+         Format          =   55050241
          CurrentDate     =   41098
       End
       Begin MSComCtl2.DTPicker FechaHasta 
          Height          =   315
-         Left            =   5520
+         Left            =   6360
          TabIndex        =   3
          Top             =   720
          Width           =   1455
@@ -543,14 +543,14 @@ Begin VB.Form frmCtaCteCliente
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   51970049
+         Format          =   55050241
          CurrentDate     =   41098
       End
       Begin VB.Label lblFechaHasta 
          AutoSize        =   -1  'True
          Caption         =   "Fecha Hasta:"
          Height          =   195
-         Left            =   4605
+         Left            =   5325
          TabIndex        =   30
          Top             =   735
          Width           =   960
@@ -559,7 +559,7 @@ Begin VB.Form frmCtaCteCliente
          AutoSize        =   -1  'True
          Caption         =   "Fecha Desde:"
          Height          =   195
-         Left            =   525
+         Left            =   165
          TabIndex        =   29
          Top             =   720
          Width           =   990
@@ -573,7 +573,7 @@ Begin VB.Form frmCtaCteCliente
          ForeColor       =   &H80000008&
          Height          =   195
          Index           =   3
-         Left            =   525
+         Left            =   285
          TabIndex        =   24
          Top             =   390
          Width           =   555
@@ -1046,14 +1046,34 @@ Private Sub chkinteres_Click()
     End If
 End Sub
 
+Private Function validar_cheque() As Boolean
+    Dim i As Integer
+    'q el saldo sea distinto de cero
+    If txtsaldototal = 0 Then
+        MsgBox "El Cliente: " & txtDesCli.Text & "  no registra deuda", vbExclamation, TIT_MSGBOX
+        validar_cheque = False
+        Exit Function
+    End If
+    'q no se repita el nro de cheque
+    For i = 1 To GrillaCheques.Rows - 1
+        If txtchenro.Text = GrillaCheques.TextMatrix(i, 0) Then
+            MsgBox "El cheque: " & txtchenro.Text & " ya ha sido ingresado", vbExclamation, TIT_MSGBOX
+            validar_cheque = False
+            Exit Function
+        End If
+    Next
+    validar_cheque = True
+End Function
 Private Sub CmdAgregar_Click()
     Dim montointeres As Double
     Dim porc_capital As Double
+    If validar_cheque = False Then Exit Sub
     'calcular interes
     calculointeres fechacob.Value, FechaHasta.Value
     
     porc_capital = (CDbl(txtchemonto.Text) / txtdebe.Text)
     'interes = interes * capital
+    
     
     'interes = interes - interes * porc_capital
     If fechacob.Value <> "" And txtchemonto.Text <> "" Then
@@ -1068,26 +1088,31 @@ Private Sub CmdAgregar_Click()
 End Sub
 Private Function sumatotales()
     Dim suma_interes As Double
+    Dim suma_cheques As Double
+    Dim c As Double
     Dim i As Integer
     suma_interes = 0
     If GrillaCheques.Rows > 1 Then
         For i = 1 To GrillaCheques.Rows - 1
             suma_interes = suma_interes + CDbl(GrillaCheques.TextMatrix(i, 4))
+            suma_cheques = suma_cheques + CDbl(GrillaCheques.TextMatrix(i, 3))
         Next
     End If
     txtinttot.Text = suma_interes
     txtinttot.Text = Valido_Importe2(txtinttot.Text)
-    'txtintereses.Text = (CDbl(txtdebe.Text) * (interes + suma_interes)) / 100
-    'txtintereses.Text = Valido_Importe2(txtintereses)
-    'txtsaldototal.Text = CDbl(txtdebe) + CDbl(txtintereses)
-    'txtsaldototal.Text = Valido_Importe2(txtsaldototal)
+    txtintereses.Text = (CDbl(txtdebe.Text) * (interes + suma_interes)) / 100
+    txtintereses.Text = Valido_Importe2(txtintereses)
+    txtsaldototal.Text = CDbl(txtdebe) + CDbl(txtintereses)
+    txtsaldototal.Text = Valido_Importe2(txtsaldototal)
+    txtchetot.Text = suma_cheques
+    txtchetot.Text = Valido_Importe2(txtchetot)
 End Function
 
 Private Sub cmdListar_Click()
     On Error GoTo CLAVOSE
     
     Screen.MousePointer = vbHourglass
-    lblestado.Caption = "Buscando..."
+    lblEstado.Caption = "Buscando..."
     'LLENO LA TABLA CTA_CTE_CLIENTE
     BuscarCtaCTeClientes
     
@@ -1126,19 +1151,19 @@ Private Sub cmdListar_Click()
     Rep.Formulas(0) = ""
     Rep.Formulas(1) = ""
     Screen.MousePointer = vbNormal
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     Exit Sub
     
 CLAVOSE:
     If rec.State = 1 Then rec.Close
     Screen.MousePointer = vbNormal
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     MsgBox Err.Description, vbCritical, TIT_MSGBOX
 End Sub
 
 Private Sub CmdNuevo_Click()
     txtCliente.Text = ""
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     FechaDesde.Value = ""
     FechaHasta.Value = ""
     optTodo.Value = True
@@ -1178,21 +1203,21 @@ Private Sub fechacob_GotFocus()
 End Sub
 
 Private Sub FechaHasta_LostFocus()
-'    If GrillaCheques.Rows = 1 And FechaDesde.Value <> "" And FechaHasta.Value <> "" Then
-'        BuscarCtaCTeClientes
-'        rec.Open "SELECT SUM(COM_IMP_DEBE) AS DEBE,CTA_CTE_INTERES FROM CTA_CTE_CLIENTE GROUP BY CTA_CTE_INTERES", DBConn, adOpenStatic, adLockOptimistic
-'        If rec.EOF = False Then
-'            txtdebe.Text = Chk0(rec!DEBE)
-'            txtdebe.Text = Valido_Importe2(txtdebe)
-'            txtintereses = CDbl(txtdebe) * Chk0(rec!CTA_CTE_INTERES) / 100
-'            txtintereses = Valido_Importe2(txtintereses)
-'            txtintaux.Text = Chk0(rec!CTA_CTE_INTERES)
-'            txtintaux.Text = Valido_Importe2(txtintaux.Text)
-'            txtsaldototal = CDbl(txtdebe) + CDbl(txtintereses)
-'            txtsaldototal = Valido_Importe2(txtsaldototal)
-'        End If
-'        rec.Close
-'    End If
+    If GrillaCheques.Rows = 1 And FechaDesde.Value <> "" And FechaHasta.Value <> "" Then
+        BuscarCtaCTeClientes
+        rec.Open "SELECT SUM(COM_IMP_DEBE) AS DEBE,CTA_CTE_INTERES FROM CTA_CTE_CLIENTE GROUP BY CTA_CTE_INTERES", DBConn, adOpenStatic, adLockOptimistic
+        If rec.EOF = False Then
+            txtdebe.Text = Chk0(rec!DEBE)
+            txtdebe.Text = Valido_Importe2(txtdebe)
+            txtintereses = CDbl(txtdebe) * Chk0(rec!CTA_CTE_INTERES) / 100
+            txtintereses = Valido_Importe2(txtintereses)
+            txtintaux.Text = Chk0(rec!CTA_CTE_INTERES)
+            txtintaux.Text = Valido_Importe2(txtintaux.Text)
+            txtsaldototal = CDbl(txtdebe) + CDbl(txtintereses)
+            txtsaldototal = Valido_Importe2(txtsaldototal)
+        End If
+        rec.Close
+    End If
 End Sub
 
 Private Sub fechainteres_Click()
@@ -1221,7 +1246,7 @@ Private Sub Form_Load()
     Me.Left = 0
     Me.Top = 0
     FrameImpresora.Caption = "Impresora Actual: " & Printer.DeviceName
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     fechainteres = Date
     preparogrilla
 End Sub

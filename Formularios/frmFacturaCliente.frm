@@ -533,7 +533,6 @@ Begin VB.Form frmFacturaCliente
       Top             =   6240
       _ExtentX        =   847
       _ExtentY        =   847
-      BaudRate        =   "38400"
    End
    Begin VB.CommandButton cmdImprimir 
       Caption         =   "&Imprimir"
@@ -611,8 +610,8 @@ Begin VB.Form frmFacturaCliente
       TabCaption(1)   =   "&Buscar"
       TabPicture(1)   =   "frmFacturaCliente.frx":002E
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "frameBuscar"
-      Tab(1).Control(1)=   "GrdModulos"
+      Tab(1).Control(0)=   "GrdModulos"
+      Tab(1).Control(1)=   "frameBuscar"
       Tab(1).ControlCount=   2
       Begin VB.TextBox txtObservaciones 
          BackColor       =   &H00C0FFFF&
@@ -981,7 +980,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54263809
+            Format          =   54132737
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker FechaHasta 
@@ -995,7 +994,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54263809
+            Format          =   54132737
             CurrentDate     =   41098
          End
          Begin VB.Label lblFechaDesde 
@@ -1127,7 +1126,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54263809
+            Format          =   54132737
             CurrentDate     =   41098
          End
          Begin VB.Label Ltipo_fac 
@@ -2335,126 +2334,126 @@ Private Sub cmdCerrarTarjeta_Click()
     cboFormaPago.SetFocus
 End Sub
 Private Function grabar_factura()
-        sql = "SELECT * FROM FACTURA_CLIENTE"
-        sql = sql & " WHERE TCO_CODIGO=" & cboFactura.ItemData(cboFactura.ListIndex)
-        sql = sql & " AND FCL_NUMERO = " & XN(txtNroFactura.Text)
-        sql = sql & " AND FCL_SUCURSAL=" & XN(txtNroSucursal.Text)
-        If rec.State = 1 Then rec.Close
-        rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
+    sql = "SELECT * FROM FACTURA_CLIENTE"
+    sql = sql & " WHERE TCO_CODIGO=" & cboFactura.ItemData(cboFactura.ListIndex)
+    sql = sql & " AND FCL_NUMERO = " & XN(txtNroFactura.Text)
+    sql = sql & " AND FCL_SUCURSAL=" & XN(txtNroSucursal.Text)
+    If rec.State = 1 Then rec.Close
+    rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
 
-        Screen.MousePointer = vbHourglass
-        lblEstado.Caption = "Guardando..."
+    Screen.MousePointer = vbHourglass
+    lblEstado.Caption = "Guardando..."
 
-        If rec.EOF = True Then
-            'NUEVA FACTURA
-            sql = "INSERT INTO FACTURA_CLIENTE"
-            sql = sql & " (TCO_CODIGO,FCL_NUMERO,FCL_SUCURSAL,FCL_FECHA,"
-            sql = sql & " FCL_IVA,FCL_IMPIVA,FPG_CODIGO,FCL_OBSERVACION,VEN_CODIGO,"
-            sql = sql & " FCL_SUBTOTAL,FCL_TOTAL,FCL_SALDO,EST_CODIGO,"
-            sql = sql & " FCL_NUMEROTXT,FCL_SUCURSALTXT,CLI_CODIGO,FCL_IMPINT,TUR_CODIGO,FCL_HORA,FCL_TASAVIAL,FCL_TOTALACT)"
-            sql = sql & " VALUES ("
-            sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
-            sql = sql & XN(txtNroFactura.Text) & ","
-            sql = sql & XN(txtNroSucursal.Text) & ","
-            sql = sql & XDQ(FechaFactura.Value) & ","
-            sql = sql & XN(txtPorcentajeIva.Text) & ","
-            sql = sql & XN(txtImporteIvaB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
-            sql = sql & cboFormaPago.ItemData(cboFormaPago.ListIndex) & ","
-            sql = sql & XS(txtObservaciones) & ","
-            sql = sql & cboVendedor.ItemData(cboVendedor.ListIndex) & ","
-            sql = sql & XN(txtsubtotal1B.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
-            sql = sql & XN(txtTotal.Text) & ","
-            sql = sql & XN(txtTotal.Text) & "," 'SALDO FACTURA
-            sql = sql & "3," 'ESTADO DEFINITIVO
-            sql = sql & XS(Format(txtNroFactura.Text, "00000000")) & ","
-            sql = sql & XS(Format(txtNroSucursal.Text, "0000")) & ","
-            sql = sql & XN(txtcodCli.Text) & "," 'CLIENTE
-            sql = sql & XN(txtimpuestoB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
-            sql = sql & cboTurno.ItemData(cboTurno.ListIndex) & ","
-            sql = sql & XS(Format(Time, "hh:mm")) & ","
-            sql = sql & XN(txttasavial.Text) & ","
-            sql = sql & XN(txtTotal.Text) & ")"
-            
-            'Format(Valor, "mm/dd/yyyy") & "#"
-            DBConn.Execute sql
-               
-            For i = 1 To grdGrilla.Rows - 1
-                If grdGrilla.TextMatrix(i, 0) <> "" Then
-                    sql = "INSERT INTO DETALLE_FACTURA_CLIENTE"
-                    sql = sql & " (TCO_CODIGO, FCL_NUMERO, FCL_SUCURSAL, DFC_NROITEM,"
-                    sql = sql & " PTO_CODIGO, DFC_CONCEPTO, DFC_CANTIDAD, DFC_PRECIO, DFC_IVA,"
-                    sql = sql & " DFC_IMP, DFC_MONIMP, DFC_MONIVA,DFC_TASAVIAL,DFC_TOTALTVIAL)"
-                    ' guardar el imp, el monto del imp y el monto del iva
-                    
-                    sql = sql & " VALUES ("
-                    sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
-                    sql = sql & XN(txtNroFactura.Text) & ","
-                    sql = sql & XN(txtNroSucursal.Text) & ","
-                    sql = sql & i & "," 'PONER EL NRO ITEM
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 0)) & ","
-                    sql = sql & XS(grdGrilla.TextMatrix(i, 1)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 2)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 3)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 6)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 7)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 8)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 9)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 11)) & ","
-                    sql = sql & XN(grdGrilla.TextMatrix(i, 12)) & ")"
-                    
-                    DBConn.Execute sql
-                    
-                    sql = "SELECT DST_STKFIS,DST_STKCON"
-                    sql = sql & " FROM STOCK"
-                    sql = sql & " WHERE STK_CODIGO = " & XN(Sucursal)
-                    sql = sql & " AND PTO_CODIGO = " & XN(grdGrilla.TextMatrix(i, 0))
-                    Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
-                    If Rec1.EOF = False Then
-                        sql = "UPDATE STOCK SET"
-                        sql = sql & " DST_STKFIS = DST_STKFIS - " & XN(grdGrilla.TextMatrix(i, 2))
-                        sql = sql & " WHERE STK_CODIGO = " & XN(Sucursal)
-                        sql = sql & " AND PTO_CODIGO = " & XN(grdGrilla.TextMatrix(i, 0))
-                        DBConn.Execute sql
-                    End If
-                    Rec1.Close
-                End If
-            Next
-            
-            For i = 1 To grdPagos.Rows - 1
-                sql = "insert into FACTURA_PAGOS (FCL_SUCURSAL,FCL_NUMERO,TCO_CODIGO,FPG_CODIGO,pag_importe,TAR_CODIGO,"
-                sql = sql & " TAR_PLAN,TAR_CUPON, TAR_LOTE,TAR_AUTORIZACION,TOTDOLAR, COTIZACION, sen_sucursal, sen_tipo,"
-                sql = sql & " sen_nro, PAG_SECUENCIA, FPG_SALDO,CHE_BANCO,CHE_NUMERO)"
-                sql = sql & " values ("
-                sql = sql & XN(txtNroSucursal.Text) & ", " & XN(txtNroFactura.Text) & ", " & XN(cboFactura.ItemData(cboFactura.ListIndex)) & ", "
-                sql = sql & XN(grdPagos.TextMatrix(i, 2)) & ","
-                sql = sql & XN(grdPagos.TextMatrix(i, 1))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 3))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 5))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 7))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 8))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 9))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 10))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 11))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 12))
-                sql = sql & "," & XN(grdPagos.TextMatrix(i, 13))
-                sql = sql & "," & XS(grdPagos.TextMatrix(i, 14)) & "," & i & ","
-                If grdPagos.TextMatrix(i, 2) <> "2" Then
-                    sql = sql & "0"
-                Else
-                    sql = sql & XN(grdPagos.TextMatrix(i, 1))
-                    mSaldo = mSaldo + CDbl(Chk0(grdPagos.TextMatrix(i, 1)))
-                End If
-                If grdPagos.TextMatrix(i, 2) = "5" Then
-                    sql = sql & "," & XS(grdPagos.TextMatrix(i, 4))
-                    sql = sql & "," & XS(grdPagos.TextMatrix(i, 6)) & ")"
-                Else
-                    sql = sql & "," & XS("")
-                    sql = sql & "," & XS("") & ")"
-                End If
+    If rec.EOF = True Then
+        'NUEVA FACTURA
+        sql = "INSERT INTO FACTURA_CLIENTE"
+        sql = sql & " (TCO_CODIGO,FCL_NUMERO,FCL_SUCURSAL,FCL_FECHA,"
+        sql = sql & " FCL_IVA,FCL_IMPIVA,FPG_CODIGO,FCL_OBSERVACION,VEN_CODIGO,"
+        sql = sql & " FCL_SUBTOTAL,FCL_TOTAL,FCL_SALDO,EST_CODIGO,"
+        sql = sql & " FCL_NUMEROTXT,FCL_SUCURSALTXT,CLI_CODIGO,FCL_IMPINT,TUR_CODIGO,FCL_HORA,FCL_TASAVIAL,FCL_TOTALACT)"
+        sql = sql & " VALUES ("
+        sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
+        sql = sql & XN(txtNroFactura.Text) & ","
+        sql = sql & XN(txtNroSucursal.Text) & ","
+        sql = sql & XDQ(FechaFactura.Value) & ","
+        sql = sql & XN(txtPorcentajeIva.Text) & ","
+        sql = sql & XN(txtImporteIvaB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
+        sql = sql & cboFormaPago.ItemData(cboFormaPago.ListIndex) & ","
+        sql = sql & XS(txtObservaciones) & ","
+        sql = sql & cboVendedor.ItemData(cboVendedor.ListIndex) & ","
+        sql = sql & XN(txtsubtotal1B.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
+        sql = sql & XN(txtTotal.Text) & ","
+        sql = sql & XN(txtTotal.Text) & "," 'SALDO FACTURA
+        sql = sql & "3," 'ESTADO DEFINITIVO
+        sql = sql & XS(Format(txtNroFactura.Text, "00000000")) & ","
+        sql = sql & XS(Format(txtNroSucursal.Text, "0000")) & ","
+        sql = sql & XN(txtcodCli.Text) & "," 'CLIENTE
+        sql = sql & XN(txtimpuestoB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
+        sql = sql & cboTurno.ItemData(cboTurno.ListIndex) & ","
+        sql = sql & XS(Format(Time, "hh:mm")) & ","
+        sql = sql & XN(txttasavial.Text) & ","
+        sql = sql & XN(txtTotal.Text) & ")"
+        
+        'Format(Valor, "mm/dd/yyyy") & "#"
+        DBConn.Execute sql
+           
+        For i = 1 To grdGrilla.Rows - 1
+            If grdGrilla.TextMatrix(i, 0) <> "" Then
+                sql = "INSERT INTO DETALLE_FACTURA_CLIENTE"
+                sql = sql & " (TCO_CODIGO, FCL_NUMERO, FCL_SUCURSAL, DFC_NROITEM,"
+                sql = sql & " PTO_CODIGO, DFC_CONCEPTO, DFC_CANTIDAD, DFC_PRECIO, DFC_IVA,"
+                sql = sql & " DFC_IMP, DFC_MONIMP, DFC_MONIVA,DFC_TASAVIAL,DFC_TOTALTVIAL)"
+                ' guardar el imp, el monto del imp y el monto del iva
+                
+                sql = sql & " VALUES ("
+                sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
+                sql = sql & XN(txtNroFactura.Text) & ","
+                sql = sql & XN(txtNroSucursal.Text) & ","
+                sql = sql & i & "," 'PONER EL NRO ITEM
+                sql = sql & XN(grdGrilla.TextMatrix(i, 0)) & ","
+                sql = sql & XS(grdGrilla.TextMatrix(i, 1)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 2)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 3)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 6)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 7)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 8)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 9)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 11)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 12)) & ")"
                 
                 DBConn.Execute sql
-            Next
+                
+                sql = "SELECT DST_STKFIS,DST_STKCON"
+                sql = sql & " FROM STOCK"
+                sql = sql & " WHERE STK_CODIGO = " & XN(Sucursal)
+                sql = sql & " AND PTO_CODIGO = " & XN(grdGrilla.TextMatrix(i, 0))
+                Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
+                If Rec1.EOF = False Then
+                    sql = "UPDATE STOCK SET"
+                    sql = sql & " DST_STKFIS = DST_STKFIS - " & XN(grdGrilla.TextMatrix(i, 2))
+                    sql = sql & " WHERE STK_CODIGO = " & XN(Sucursal)
+                    sql = sql & " AND PTO_CODIGO = " & XN(grdGrilla.TextMatrix(i, 0))
+                    DBConn.Execute sql
+                End If
+                Rec1.Close
+            End If
+        Next
+        
+        For i = 1 To grdPagos.Rows - 1
+            sql = "insert into FACTURA_PAGOS (FCL_SUCURSAL,FCL_NUMERO,TCO_CODIGO,FPG_CODIGO,pag_importe,TAR_CODIGO,"
+            sql = sql & " TAR_PLAN,TAR_CUPON, TAR_LOTE,TAR_AUTORIZACION,TOTDOLAR, COTIZACION, sen_sucursal, sen_tipo,"
+            sql = sql & " sen_nro, PAG_SECUENCIA, FPG_SALDO,CHE_BANCO,CHE_NUMERO)"
+            sql = sql & " values ("
+            sql = sql & XN(txtNroSucursal.Text) & ", " & XN(txtNroFactura.Text) & ", " & XN(cboFactura.ItemData(cboFactura.ListIndex)) & ", "
+            sql = sql & XN(grdPagos.TextMatrix(i, 2)) & ","
+            sql = sql & XN(grdPagos.TextMatrix(i, 1))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 3))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 5))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 7))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 8))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 9))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 10))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 11))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 12))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 13))
+            sql = sql & "," & XS(grdPagos.TextMatrix(i, 14)) & "," & i & ","
+            If grdPagos.TextMatrix(i, 2) <> "2" Then
+                sql = sql & "0"
+            Else
+                sql = sql & XN(grdPagos.TextMatrix(i, 1))
+                mSaldo = mSaldo + CDbl(Chk0(grdPagos.TextMatrix(i, 1)))
+            End If
+            If grdPagos.TextMatrix(i, 2) = "5" Then
+                sql = sql & "," & XS(grdPagos.TextMatrix(i, 4))
+                sql = sql & "," & XS(grdPagos.TextMatrix(i, 6)) & ")"
+            Else
+                sql = sql & "," & XS("")
+                sql = sql & "," & XS("") & ")"
+            End If
             
+            DBConn.Execute sql
+        Next
+        
 '            sql = "UPDATE FACTURA_CLIENTE"
 '            sql = sql & " SET FCL_SALDO=" & XN(CStr(mSaldo))
 '            sql = sql & " WHERE"
@@ -2462,17 +2461,17 @@ Private Function grabar_factura()
 '            sql = sql & " AND FCL_NUMERO=" & XN(txtNroFactura.Text)
 '            sql = sql & " AND FCL_SUCURSAL=" & XN(txtNroSucursal.Text)
 '            DBConn.Execute sql
-            
-            'ACTUALIZO LA TABLA PARAMENTROS Y LE SUMO UNO A LA FACTURA QUE CORRESPONDE
-    '        Select Case cboFactura.ItemData(cboFactura.ListIndex)
-    '            Case 1
-    '                sql = "UPDATE PARAMETROS SET FACTURA_C=" & XN(txtNroFactura.Text)
-    '            Case 2
-    '                sql = "UPDATE PARAMETROS SET FACTURA_C=" & XN(txtNroFactura.Text)
-    '        End Select
-    '        DBConn.Execute sql
-        End If
-        rec.Close
+        
+        'ACTUALIZO LA TABLA PARAMENTROS Y LE SUMO UNO A LA FACTURA QUE CORRESPONDE
+'        Select Case cboFactura.ItemData(cboFactura.ListIndex)
+'            Case 1
+'                sql = "UPDATE PARAMETROS SET FACTURA_C=" & XN(txtNroFactura.Text)
+'            Case 2
+'                sql = "UPDATE PARAMETROS SET FACTURA_C=" & XN(txtNroFactura.Text)
+'        End Select
+'        DBConn.Execute sql
+    End If
+    rec.Close
 End Function
 Private Function seteo_iva()
     If txtImporteIva.Text = "" Then
@@ -3049,20 +3048,20 @@ Private Sub Imprimo_Fiscal()
                 'mRespuestaFiscal = pf.SendTicketItem(Trim(ChkNull(GRDGrilla.TextMatrix(i, 1))), Trim(iCanti), Trim(iPrecio), Trim(mIvaFE), "M", "0", "0")
                 If mRespuestaFiscal = False Then Exit Sub
             End If
-            If txttasavial.Text <> "0,000" Then
-                mTVialDbl = CDbl(grdGrilla.TextMatrix(i, 11))
-                mTasaVial = Str(mTVialDbl * mContPrecio)
-                iCanti = Str(Format(CDbl(grdGrilla.TextMatrix(i, 2)), "0.00") * mContCanti)
-                'iPrecio = Str(mPneto * mContPrecio)
-                If cboFactura.ItemData(cboFactura.ListIndex) = 10000 Then  '"T" TIKET
-                    'mRespuestaFiscal = pf.SendTicketItem(Trim(ChkNull(grdGrilla.TextMatrix(I, 1))), Trim(iCanti), Trim(iPrecio), Trim(mIvaFE), "M", "0", "0", Trim(iImpInt))
-                    mRespuestaFiscal = pf.SendTicketItem("Tasa Vial", Trim(iCanti), Trim(mTasaVial), "0", "M", "0", "0", "")
-                    If mRespuestaFiscal = False Then Exit Sub
-                Else
-                    mRespuestaFiscal = pf.SendInvoiceItem("Tasa Vial", Trim(mTasaVial), Trim(iCanti), "", "M", "0", "0", "", "", "", "", "")
-                    If mRespuestaFiscal = False Then Exit Sub
-                End If
-            End If
+            'If txtTasaVial.Text <> "0,000" Then
+            '    mTVialDbl = CDbl(GRDGrilla.TextMatrix(i, 11))
+            '    mTasaVial = Str(mTVialDbl * mContPrecio)
+            '    iCanti = Str(Format(CDbl(GRDGrilla.TextMatrix(i, 2)), "0.00") * mContCanti)
+            '    'iPrecio = Str(mPneto * mContPrecio)
+            '    If cboFactura.ItemData(cboFactura.ListIndex) = 10000 Then  '"T" TIKET
+            '        'mRespuestaFiscal = pf.SendTicketItem(Trim(ChkNull(grdGrilla.TextMatrix(I, 1))), Trim(iCanti), Trim(iPrecio), Trim(mIvaFE), "M", "0", "0", Trim(iImpInt))
+            '        mRespuestaFiscal = pf.SendTicketItem("Tasa Vial", Trim(iCanti), Trim(mTasaVial), "0", "M", "0", "0", "")
+            '        If mRespuestaFiscal = False Then Exit Sub
+            '    Else
+            '        mRespuestaFiscal = pf.SendInvoiceItem("Tasa Vial", Trim(mTasaVial), Trim(iCanti), "", "M", "0", "0", "", "", "", "", "")
+            '        If mRespuestaFiscal = False Then Exit Sub
+            '    End If
+            'End If
             
         End If
     Next
@@ -3384,7 +3383,7 @@ Private Sub cmdModificarCli_Click()
     If txtcodCli.Text <> "" Then
         ABMClientes.vMode = 2
         ABMClientes.vFieldID = "'" & txtcodCli.Text & "'"
-        ABMClientes.txtID.Text = txtcodCli.Text
+        ABMClientes.txtId.Text = txtcodCli.Text
         ABMClientes.Show
     End If
 End Sub
@@ -3407,6 +3406,7 @@ If MsgBox("Confirma la impresion de la Nota de Credito?", vbQuestion + vbYesNo, 
         End Select
     
         Imprimo_NC_Fiscal
+        'GrabarNC
     End If
     
 '    If cboFactura.ItemData(cboFactura.ListIndex) = 1 Then 'NOTA CREDITO A
@@ -3476,7 +3476,144 @@ If MsgBox("Confirma la impresion de la Nota de Credito?", vbQuestion + vbYesNo, 
 End If
 End Sub
 Private Function GrabarNC()
+    sql = "SELECT * FROM NOTA_CREDITO_CLIENTE"
+    sql = sql & " WHERE TCO_CODIGO=" & cboFactura.ItemData(cboFactura.ListIndex)
+    sql = sql & " AND NCC_NUMERO = " & XN(txtNroFactura.Text)
+    sql = sql & " AND NCC_SUCURSAL=" & XN(txtNroSucursal.Text)
+    If rec.State = 1 Then rec.Close
+    rec.Open sql, DBConn, adOpenStatic, adLockOptimistic
 
+    Screen.MousePointer = vbHourglass
+    lblEstado.Caption = "Guardando..."
+
+    If rec.EOF = True Then
+        'NUEVA NOTA_CREDITO
+        sql = "INSERT INTO NOTA_CREDITO_CLIENTE"
+        sql = sql & " (TCO_CODIGO,NCC_NUMERO,NCC_SUCURSAL,NCC_FECHA,"
+        sql = sql & " NCC_IVA,NCC_IMPIVA,FPG_CODIGO,NCC_OBSERVACION,VEN_CODIGO,"
+        sql = sql & " NCC_SUBTOTAL,NCC_TOTAL,NCC_SALDO,EST_CODIGO,"
+        sql = sql & " NCC_NUMEROTXT,NCC_SUCURSALTXT,CLI_CODIGO,NCC_IMPINT,TUR_CODIGO,NCC_HORA,NCC_TASAVIAL,NCC_TOTALACT)"
+        sql = sql & " VALUES ("
+        sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
+        sql = sql & XN(txtNroFactura.Text) & ","
+        sql = sql & XN(txtNroSucursal.Text) & ","
+        sql = sql & XDQ(FechaFactura.Value) & ","
+        sql = sql & XN(txtPorcentajeIva.Text) & ","
+        sql = sql & XN(txtImporteIvaB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
+        sql = sql & cboFormaPago.ItemData(cboFormaPago.ListIndex) & ","
+        sql = sql & XS(txtObservaciones) & ","
+        sql = sql & cboVendedor.ItemData(cboVendedor.ListIndex) & ","
+        sql = sql & XN(txtsubtotal1B.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
+        sql = sql & XN(txtTotal.Text) & ","
+        sql = sql & XN(txtTotal.Text) & "," 'SALDO NOTA_CREDITO
+        sql = sql & "3," 'ESTADO DEFINITIVO
+        sql = sql & XS(Format(txtNroFactura.Text, "00000000")) & ","
+        sql = sql & XS(Format(txtNroSucursal.Text, "0000")) & ","
+        sql = sql & XN(txtcodCli.Text) & "," 'CLIENTE
+        sql = sql & XN(txtimpuestoB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
+        sql = sql & cboTurno.ItemData(cboTurno.ListIndex) & ","
+        sql = sql & XS(Format(Time, "hh:mm")) & ","
+        sql = sql & XN(txttasavial.Text) & ","
+        sql = sql & XN(txtTotal.Text) & ")"
+        
+        'Format(Valor, "mm/dd/yyyy") & "#"
+        DBConn.Execute sql
+           
+        For i = 1 To grdGrilla.Rows - 1
+            If grdGrilla.TextMatrix(i, 0) <> "" Then
+                sql = "INSERT INTO DETALLE_NOTA_CREDITO_CLIENTE"
+                sql = sql & " (TCO_CODIGO, NCC_NUMERO, NCC_SUCURSAL, DFC_NROITEM,"
+                sql = sql & " PTO_CODIGO, DFC_CONCEPTO, DFC_CANTIDAD, DFC_PRECIO, DFC_IVA,"
+                sql = sql & " DFC_IMP, DFC_MONIMP, DFC_MONIVA,DFC_TASAVIAL,DFC_TOTALTVIAL)"
+                ' guardar el imp, el monto del imp y el monto del iva
+                
+                sql = sql & " VALUES ("
+                sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
+                sql = sql & XN(txtNroFactura.Text) & ","
+                sql = sql & XN(txtNroSucursal.Text) & ","
+                sql = sql & i & "," 'PONER EL NRO ITEM
+                sql = sql & XN(grdGrilla.TextMatrix(i, 0)) & ","
+                sql = sql & XS(grdGrilla.TextMatrix(i, 1)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 2)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 3)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 6)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 7)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 8)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 9)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 11)) & ","
+                sql = sql & XN(grdGrilla.TextMatrix(i, 12)) & ")"
+                
+                DBConn.Execute sql
+                
+                sql = "SELECT DST_STKFIS,DST_STKCON"
+                sql = sql & " FROM STOCK"
+                sql = sql & " WHERE STK_CODIGO = " & XN(Sucursal)
+                sql = sql & " AND PTO_CODIGO = " & XN(grdGrilla.TextMatrix(i, 0))
+                Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
+                If Rec1.EOF = False Then
+                    sql = "UPDATE STOCK SET"
+                    sql = sql & " DST_STKFIS = DST_STKFIS - " & XN(grdGrilla.TextMatrix(i, 2))
+                    sql = sql & " WHERE STK_CODIGO = " & XN(Sucursal)
+                    sql = sql & " AND PTO_CODIGO = " & XN(grdGrilla.TextMatrix(i, 0))
+                    DBConn.Execute sql
+                End If
+                Rec1.Close
+            End If
+        Next
+        
+        For i = 1 To grdPagos.Rows - 1
+            sql = "insert into FACTURA_PAGOS (NCC_SUCURSAL,NCC_NUMERO,TCO_CODIGO,FPG_CODIGO,pag_importe,TAR_CODIGO,"
+            sql = sql & " TAR_PLAN,TAR_CUPON, TAR_LOTE,TAR_AUTORIZACION,TOTDOLAR, COTIZACION, sen_sucursal, sen_tipo,"
+            sql = sql & " sen_nro, PAG_SECUENCIA, FPG_SALDO,CHE_BANCO,CHE_NUMERO)"
+            sql = sql & " values ("
+            sql = sql & XN(txtNroSucursal.Text) & ", " & XN(txtNroFactura.Text) & ", " & XN(cboFactura.ItemData(cboFactura.ListIndex)) & ", "
+            sql = sql & XN(grdPagos.TextMatrix(i, 2)) & ","
+            sql = sql & XN(grdPagos.TextMatrix(i, 1))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 3))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 5))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 7))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 8))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 9))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 10))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 11))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 12))
+            sql = sql & "," & XN(grdPagos.TextMatrix(i, 13))
+            sql = sql & "," & XS(grdPagos.TextMatrix(i, 14)) & "," & i & ","
+            If grdPagos.TextMatrix(i, 2) <> "2" Then
+                sql = sql & "0"
+            Else
+                sql = sql & XN(grdPagos.TextMatrix(i, 1))
+                mSaldo = mSaldo + CDbl(Chk0(grdPagos.TextMatrix(i, 1)))
+            End If
+            If grdPagos.TextMatrix(i, 2) = "5" Then
+                sql = sql & "," & XS(grdPagos.TextMatrix(i, 4))
+                sql = sql & "," & XS(grdPagos.TextMatrix(i, 6)) & ")"
+            Else
+                sql = sql & "," & XS("")
+                sql = sql & "," & XS("") & ")"
+            End If
+            
+            DBConn.Execute sql
+        Next
+        
+'            sql = "UPDATE NOTA_CREDITO_CLIENTE"
+'            sql = sql & " SET NCC_SALDO=" & XN(CStr(mSaldo))
+'            sql = sql & " WHERE"
+'            sql = sql & " TCO_CODIGO=" & cboFactura.ItemData(cboFactura.ListIndex)
+'            sql = sql & " AND NCC_NUMERO=" & XN(txtNroFactura.Text)
+'            sql = sql & " AND NCC_SUCURSAL=" & XN(txtNroSucursal.Text)
+'            DBConn.Execute sql
+        
+        'ACTUALIZO LA TABLA PARAMENTROS Y LE SUMO UNO A LA NOTA_CREDITO QUE CORRESPONDE
+'        Select Case cboFactura.ItemData(cboFactura.ListIndex)
+'            Case 1
+'                sql = "UPDATE PARAMETROS SET NOTA_CREDITO_C=" & XN(txtNroFactura.Text)
+'            Case 2
+'                sql = "UPDATE PARAMETROS SET NOTA_CREDITO_C=" & XN(txtNroFactura.Text)
+'        End Select
+'        DBConn.Execute sql
+    End If
+    rec.Close
 End Function
 Private Sub CmdNuevo_Click()
    mIVA_1 = BuscoIva
@@ -4815,22 +4952,23 @@ Private Sub txtCodCli_LostFocus()
             QueFacturaUso (rec!IVA_CODIGO)
             txtNRO_DOCUMENTO.Text = Trim(ChkNull(rec!CLI_NRODOC))
             
-
             
-            If Chk0(rec!CLI_CTACTE) > 0 Then
-                lblSaldoFac.Visible = True
-                lblSaldoFac = "Saldo Facturacion: $" & BuscarSaldoFactura(rec!CLI_CODIGO, rec!CLI_CTACTE)
-                SaldoCli = BuscarSaldoFactura(rec!CLI_CODIGO, rec!CLI_CTACTE)
-            Else
-                lblSaldoFac.Visible = False
-                
-            End If
-            If Chk0(rec!CLI_BLOCKEADO) = 1 Then
-                lblblockeado.Visible = True
-                lblblockeado = "CLIENTE CON CUENTA CORRIENTE BLOQUEADA"
-                
-            Else
-                lblblockeado.Visible = False
+            If txtcodCli.Text <> 1 Then
+                If Chk0(rec!CLI_CTACTE) > 0 Then 'ojo cambio aca
+                    lblSaldoFac.Visible = True
+                    'lblSaldoFac = "Saldo Facturacion: $" & BuscarSaldoFactura(rec!CLI_CODIGO, rec!CLI_CTACTE)
+                    'SaldoCli = BuscarSaldoFactura(rec!CLI_CODIGO, rec!CLI_CTACTE)
+                Else
+                    lblSaldoFac.Visible = False
+                    
+                End If
+                If Chk0(rec!CLI_BLOCKEADO) = 1 Then
+                    lblblockeado.Visible = True
+                    lblblockeado = "CLIENTE CON CUENTA CORRIENTE BLOQUEADA"
+                    
+                Else
+                    lblblockeado.Visible = False
+                End If
             End If
             cboCondicion.Clear
             cboFormaPago.Clear
@@ -5833,35 +5971,89 @@ Private Function BuscarSaldoFactura(CodCli As String, limiteCtaCTe As Double) As
         Dim TotalDeuda As Double
         TotalDeuda = 0
         'BUSCA LAS FACTURAS
-        sql = "SELECT FCL_NUMERO AS NUMERO, FCL_SUCURSAL AS SUCURSAL, "
-        sql = sql & " FCL_FECHA AS FECHA, FCL_TOTAL AS TOTAL, FCL_SALDO AS SALDO"
-        sql = sql & " ,TCO_CODIGO AS TIPO, TCO_ABREVIA AS ABREVIA"
-        sql = sql & " FROM SALDO_FACTURAS_CLIENTE_V"
-        sql = sql & " WHERE "
-        sql = sql & " CLI_CODIGO=" & XN(CodCli)
-        sql = sql & " UNION ALL"
+'        sql = "SELECT FCL_NUMERO AS NUMERO, FCL_SUCURSAL AS SUCURSAL, "
+'        sql = sql & " FCL_FECHA AS FECHA, FCL_TOTAL AS TOTAL, FCL_SALDO AS SALDO"
+'        sql = sql & " ,TCO_CODIGO AS TIPO, TCO_ABREVIA AS ABREVIA"
+'        sql = sql & " FROM SALDO_FACTURAS_CLIENTE_V"
+'        sql = sql & " WHERE "
+'        sql = sql & " CLI_CODIGO=" & XN(CodCli)
+'        sql = sql & " UNION ALL"
+'
+'        'BUSCA LAS NOTA DE DEBITO
+'        sql = sql & " SELECT NDC_NUMERO AS NUMERO, NDC_SUCURSAL AS SUCURSAL, "
+'        sql = sql & " NDC_FECHA AS FECHA, NDC_TOTAL AS TOTAL, NDC_SALDO AS SALDO"
+'        sql = sql & " ,TCO_CODIGO AS TIPO, TCO_ABREVIA AS ABREVIA"
+'        sql = sql & " FROM SALDO_NOTA_DEBITO_CLIENTE_V"
+'        sql = sql & " WHERE "
+'        sql = sql & " CLI_CODIGO=" & XN(CodCli)
+'        sql = sql & " ORDER BY FECHA , NUMERO ASC"
+           
+        sql = "DELETE FROM CTA_CTE_CLIENTE"
+        DBConn.Execute sql
+       
+        'TODAS LAS FACTURAS
+        sql = "INSERT INTO CTA_CTE_CLIENTE (CLI_CODIGO,TCO_CODIGO,COM_NUMERO,COM_SUCURSAL,"
+        sql = sql & " COM_FECHA,COM_IMPORTE,COM_IMP_DEBE,COM_IMP_HABER,CTA_CTE_DH,COM_NUMEROTXT)"
+        sql = sql & " SELECT F.CLI_CODIGO,F.TCO_CODIGO,F.FCL_NUMERO,F.FCL_SUCURSAL,"
+        sql = sql & " F.FCL_FECHA,F.FCL_TOTAL,F.FCL_TOTALACT,0 AS HABER,'D' AS DEBE,FCL_NUMEROTXT"
+        sql = sql & " FROM FACTURA_CLIENTE F"
+        sql = sql & " WHERE F.EST_CODIGO=3"
+        sql = sql & " AND FPG_CODIGO=2"
+        sql = sql & " AND F.CLI_CODIGO=" & XN(txtcodCli.Text)
+        DBConn.Execute sql
+    
+        'TODAS LAS NOTAS DEBITOS CLIENTE
+        sql = "INSERT INTO CTA_CTE_CLIENTE (CLI_CODIGO,TCO_CODIGO,COM_NUMERO,COM_SUCURSAL,"
+        sql = sql & " COM_FECHA,COM_IMPORTE,COM_IMP_DEBE,COM_IMP_HABER,CTA_CTE_DH,"
+        sql = sql & " COM_NUMEROTXT)"
+        sql = sql & " SELECT DISTINCT N.CLI_CODIGO,N.TCO_CODIGO,N.NDC_NUMERO,N.NDC_SUCURSAL,"
+        sql = sql & " N.NDC_FECHA,N.NDC_TOTAL,N.NDC_TOTAL,0 AS HABER,'D' AS DEBE,N.NDC_NUMEROTXT"
+        sql = sql & " FROM NOTA_DEBITO_CLIENTE N"
+        sql = sql & " WHERE N.EST_CODIGO=3"
+        sql = sql & " AND N.CLI_CODIGO=" & XN(txtcodCli.Text)
+        DBConn.Execute sql
         
-        'BUSCA LAS NOTA DE DEBITO
-        sql = sql & " SELECT NDC_NUMERO AS NUMERO, NDC_SUCURSAL AS SUCURSAL, "
-        sql = sql & " NDC_FECHA AS FECHA, NDC_TOTAL AS TOTAL, NDC_SALDO AS SALDO"
-        sql = sql & " ,TCO_CODIGO AS TIPO, TCO_ABREVIA AS ABREVIA"
-        sql = sql & " FROM SALDO_NOTA_DEBITO_CLIENTE_V"
-        sql = sql & " WHERE "
-        sql = sql & " CLI_CODIGO=" & XN(CodCli)
-        sql = sql & " ORDER BY FECHA , NUMERO ASC"
+        'TODAS LAS NOTAS CREDITO CLIENTE
+        sql = "INSERT INTO CTA_CTE_CLIENTE (CLI_CODIGO,TCO_CODIGO,COM_NUMERO,COM_SUCURSAL,"
+        sql = sql & " COM_FECHA,COM_IMPORTE,COM_IMP_DEBE,COM_IMP_HABER,CTA_CTE_DH,"
+        sql = sql & " COM_NUMEROTXT)"
+        sql = sql & " SELECT DISTINCT N.CLI_CODIGO,N.TCO_CODIGO,N.NCC_NUMERO,N.NCC_SUCURSAL,"
+        sql = sql & " N.NCC_FECHA,N.NCC_TOTAL,0 AS DEBE,NCC_TOTAL,'C' AS CREDITO,N.NCC_NUMEROTXT"
+        sql = sql & " FROM NOTA_CREDITO_CLIENTE N"
+        sql = sql & " WHERE N.EST_CODIGO=3"
+        sql = sql & " AND N.CLI_CODIGO=" & XN(txtcodCli.Text)
+        DBConn.Execute sql
+        
+        'TODOS LOS RECIBOS
+        sql = "INSERT INTO CTA_CTE_CLIENTE (CLI_CODIGO,TCO_CODIGO,COM_NUMERO,COM_SUCURSAL,"
+        sql = sql & " COM_FECHA,COM_IMPORTE,COM_IMP_DEBE,COM_IMP_HABER,CTA_CTE_DH,"
+        sql = sql & " COM_NUMEROTXT)"
+        sql = sql & " SELECT DISTINCT R.CLI_CODIGO,R.TCO_CODIGO,R.REC_NUMERO,R.REC_SUCURSAL,"
+        sql = sql & " R.REC_FECHA,R.REC_TOTAL,0 AS DEBE,REC_TOTAL,'C' AS CREDITO,R.REC_NUMEROTXT"
+        sql = sql & " FROM RECIBO_CLIENTE R"
+        sql = sql & " WHERE R.EST_CODIGO=3"
+        sql = sql & " AND R.CLI_CODIGO=" & XN(txtcodCli.Text)
+        DBConn.Execute sql
+        
+        sql = "SELECT SUM(COM_IMP_DEBE) AS DEBE,SUM(COM_IMP_HABER) AS HABER FROM CTA_CTE_CLIENTE"
         
         Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
+        
+        'Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
         If Rec1.EOF = False Then
             Do While Rec1.EOF = False
-                If Rec1!Saldo > 0 Then
+                'If Rec1!Saldo > 0 Then
 
-                    TotalDeuda = CDbl(TotalDeuda) + VALIDO_IMPORTE4(Rec1!Saldo)
-                End If
+                TotalDeuda = VALIDO_IMPORTE4(Chk0(Rec1!DEBE) - Chk0(Rec1!HABER))
+                'End If
                 Rec1.MoveNext
             Loop
 '            GrillaAplicar.HighLight = flexHighlightAlways
-            BuscarSaldoFactura = Format(limiteCtaCTe - TotalDeuda, "#,##0.0000")
-            
+            If limiteCtaCTe = 0 Then
+                BuscarSaldoFactura = Format(TotalDeuda, "#,##0.0000")
+            Else
+                BuscarSaldoFactura = Format(limiteCtaCTe - TotalDeuda, "#,##0.0000")
+            End If
             'txtSaldo.Text = Format(TotalDeuda, "0.00")
         Else
             BuscarSaldoFactura = limiteCtaCTe
@@ -5928,8 +6120,6 @@ Private Sub Imprimo_NC_Fiscal()
         'original
         'EMULADOR mRespuestaFiscal = pf.OpenInvoice("T", "C", "A", "1", "P", "12", "I", mRespo.Text, txtRazSoc.Text, "A", "CUIT", txtCuit.Text, "N", Trim(mIngBrutos), Trim(mVendedor), "X", "X", "B", "G")
         mRespuestaFiscal = pf.OpenInvoice("M", "C", "A", "1", "P", "12", "I", mRespo.Text, txtRazSoc.Text, "", "CUIT", txtCuit.Text, "N", Trim(mIngBrutos), Trim(mVendedor), "", Trim(txtNroFactura), "", "G")
-        'mRespuestaFiscal = pf.OpenInvoice("M", "C", "A", "1", "P", 12, "I", mRespo.Text, txtRazSoc.Text, "-", "CUIT", txtCuit.Text, "N", Trim(mVendedor), cpago, usua, cturno, "-", "C")
-        
         'talampaya
         'mRespuestaFiscal = pf.OpenInvoice("T", "C", "A", "1", "P", "12", "I", mRespo.Text, txtRazSoc.Text, "", "CUIT", txtCuit.Text, "N", "", Trim(mVendedor), "", "", "", "C")
         
@@ -5951,7 +6141,6 @@ Private Sub Imprimo_NC_Fiscal()
             'mRespuestaFiscal = pf.OpenInvoice("T", "C", "B", "1", "P", "12", "I", mRespo.Text, txtRazSoc.Text, "", "DNI", txtNRO_DOCUMENTO.Text, "N", Trim(mDireccion.Text), Trim(mLocalidad.Text), Trim(mProvincia.Text), "", "", "C")
             'EMULADOR mRespuestaFiscal = pf.OpenInvoice("T", "C", "B", "1", "P", "12", "I", mRespo.Text, txtRazSoc.Text, "A", "DNI", txtNRO_DOCUMENTO.Text, "N", "Z", Trim(mVendedor), "X", "X", "B", "C")
             mRespuestaFiscal = pf.OpenInvoice("M", "C", "B", "1", "P", "12", "I", mRespo.Text, txtRazSoc.Text, "", "DNI", txtNRO_DOCUMENTO.Text, "N", "", Trim(mVendedor), "", "", "", "C")
-            
             If mRespuestaFiscal = False Then Exit Sub
         Else
             'MONOTRIBUTO - ABRO UN TIKET FACTURA B PERO CON TIPO DE DOCUMENTO CUIT
@@ -5981,7 +6170,7 @@ Private Sub Imprimo_NC_Fiscal()
                     mItc = Format(mItc, "0.00000000")
                     
                     mPneto = mPneto / CDbl(grdGrilla.TextMatrix(i, 2))
-                    mPneto = Format(mPneto, "0.0000")
+                    mPneto = Format(mPneto, "0.000")
                 Else
                     'GASOIL
                     mItc = CDbl(grdGrilla.TextMatrix(i, 2)) * CDbl(grdGrilla.TextMatrix(i, 7))
@@ -5994,7 +6183,7 @@ Private Sub Imprimo_NC_Fiscal()
                     mItc = Format(mItc, "0.00000000")
                     
                     mPneto = mPneto / CDbl(grdGrilla.TextMatrix(i, 2))
-                    mPneto = Format(mPneto, "0.0000")
+                    mPneto = Format(mPneto, "0.000")
                 
                 End If
             Else
@@ -6007,19 +6196,19 @@ Private Sub Imprimo_NC_Fiscal()
                     mItc = CDbl(grdGrilla.TextMatrix(i, 2)) * CDbl(grdGrilla.TextMatrix(i, 7))
                     'mPneto = CDbl(grdGrilla.TextMatrix(I, 2)) * CDbl(grdGrilla.TextMatrix(I, 3)) - mItc
                     'mPneto = mPneto / (1 + (mIVA_1 / 100))
-                    mPneto = Format(CDbl(grdGrilla.TextMatrix(i, 2)) * (CDbl(grdGrilla.TextMatrix(i, 3)) - CDbl(grdGrilla.TextMatrix(i, 11))), "0.0000") ' ESTOY RESTANDO LA TASA VIAL COL 11
+                    mPneto = Format(CDbl(grdGrilla.TextMatrix(i, 2)) * (CDbl(grdGrilla.TextMatrix(i, 3)) - CDbl(grdGrilla.TextMatrix(i, 11))), "0.000") ' ESTOY RESTANDO LA TASA VIAL COL 11
                     If mPneto = 0 Then
                         mItc = mPneto
                         mItc = Format(mItc, "0.00000000")
                     
                         mPneto = mPneto
-                        mPneto = Format(mPneto, "0.0000")
+                        mPneto = Format(mPneto, "0.000")
                     Else
                         mItc = mItc / mPneto
                         mItc = Format(mItc, "0.00000000")
                     
                         mPneto = mPneto / CDbl(grdGrilla.TextMatrix(i, 2))
-                        mPneto = Format(mPneto, "0.0000")
+                        mPneto = Format(mPneto, "0.000")
                     End If
                     
                 Else
@@ -6027,7 +6216,7 @@ Private Sub Imprimo_NC_Fiscal()
                     mItc = CDbl(grdGrilla.TextMatrix(i, 2)) * CDbl(grdGrilla.TextMatrix(i, 7))
                     'mPneto = CDbl(grdGrilla.TextMatrix(I, 2)) * CDbl(grdGrilla.TextMatrix(I, 3)) - mItc
                     'mPneto = mPneto / (1 + (mIVA_2 / 100)) '
-                    mPneto = Format(CDbl(grdGrilla.TextMatrix(i, 2)) * (CDbl(grdGrilla.TextMatrix(i, 3)) - CDbl(grdGrilla.TextMatrix(i, 11))), "0.0000") ' ESTOY RESTANDO LA TASA VIAL COL 11
+                    mPneto = Format(CDbl(grdGrilla.TextMatrix(i, 2)) * (CDbl(grdGrilla.TextMatrix(i, 3)) - CDbl(grdGrilla.TextMatrix(i, 11))), "0.000") ' ESTOY RESTANDO LA TASA VIAL COL 11
                     
                     mTasa = mPneto * ((mIVA_2 - mIVA_1) / 100) ' RESTAR LOS DOS IVAS (40-21)
                                        
@@ -6036,7 +6225,7 @@ Private Sub Imprimo_NC_Fiscal()
                     mItc = Format(mItc, "0.00000000")
                     
                     mPneto = mPneto / CDbl(grdGrilla.TextMatrix(i, 2))
-                    mPneto = Format(mPneto, "0.0000")
+                    mPneto = Format(mPneto, "0.000")
                 
                 End If
                 
@@ -6064,20 +6253,20 @@ Private Sub Imprimo_NC_Fiscal()
                 'mRespuestaFiscal = pf.SendTicketItem(Trim(ChkNull(GRDGrilla.TextMatrix(i, 1))), Trim(iCanti), Trim(iPrecio), Trim(mIvaFE), "M", "0", "0")
                 If mRespuestaFiscal = False Then Exit Sub
             End If
-            If txttasavial.Text <> "0,000" Then
-                mTVialDbl = CDbl(grdGrilla.TextMatrix(i, 11))
-                mTasaVial = Str(mTVialDbl * mContPrecio)
-                iCanti = Str(Format(CDbl(grdGrilla.TextMatrix(i, 2)), "0.00") * mContCanti)
-                'iPrecio = Str(mPneto * mContPrecio)
-                If cboFactura.ItemData(cboFactura.ListIndex) = 10000 Then  '"T" TIKET
-                    'mRespuestaFiscal = pf.SendTicketItem(Trim(ChkNull(grdGrilla.TextMatrix(I, 1))), Trim(iCanti), Trim(iPrecio), Trim(mIvaFE), "M", "0", "0", Trim(iImpInt))
-                    mRespuestaFiscal = pf.SendTicketItem("Tasa Vial", Trim(iCanti), Trim(mTasaVial), "0", "M", "0", "0", "")
-                    If mRespuestaFiscal = False Then Exit Sub
-                Else
-                    mRespuestaFiscal = pf.SendInvoiceItem("Tasa Vial", Trim(mTasaVial), Trim(iCanti), "", "M", "0", "0", "", "", "", "", "")
-                    If mRespuestaFiscal = False Then Exit Sub
-                End If
-            End If
+            'If txttasavial.Text <> "0,000" Then
+            '    mTVialDbl = CDbl(grdGrilla.TextMatrix(i, 11))
+            '    mTasaVial = Str(mTVialDbl * mContPrecio)
+            '    iCanti = Str(Format(CDbl(grdGrilla.TextMatrix(i, 2)), "0.00") * mContCanti)
+            '    'iPrecio = Str(mPneto * mContPrecio)
+            '    If cboFactura.ItemData(cboFactura.ListIndex) = 10000 Then  '"T" TIKET
+            '        'mRespuestaFiscal = pf.SendTicketItem(Trim(ChkNull(grdGrilla.TextMatrix(I, 1))), Trim(iCanti), Trim(iPrecio), Trim(mIvaFE), "M", "0", "0", Trim(iImpInt))
+            '        mRespuestaFiscal = pf.SendTicketItem("Tasa Vial", Trim(iCanti), Trim(mTasaVial), "0", "M", "0", "0", "")
+            '        If mRespuestaFiscal = False Then Exit Sub
+            '    Else
+            '        mRespuestaFiscal = pf.SendInvoiceItem("Tasa Vial", Trim(mTasaVial), Trim(iCanti), "", "M", "0", "0", "", "", "", "", "")
+            '        If mRespuestaFiscal = False Then Exit Sub
+            '    End If
+            'End If
             
         End If
     Next
