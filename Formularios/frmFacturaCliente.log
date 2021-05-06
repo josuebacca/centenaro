@@ -1,1 +1,5 @@
-Línea 31: la clase EPSON_Impresora_Fiscal.PrinterFiscal del control EpsonFiscal no era una clase de control cargada.
+Line 531: Class EPSON_Impresora_Fiscal.PrinterFiscal of control pf was not a loaded control class.
+Line 534: The property name _ExtentX in pf is invalid.
+Line 535: The property name _ExtentY in pf is invalid.
+Line 534: The property name _ExtentX in pf is invalid.
+Line 535: The property name _ExtentY in pf is invalid.

@@ -3,8 +3,8 @@ Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{00025600-0000-0000-C000-000000000046}#5.2#0"; "Crystl32.OCX"
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Object = "{C932BA88-4374-101B-A56C-00AA003668DC}#1.1#0"; "MSMASK32.OCX"
-Object = "{AFD24A52-2823-4FBD-B75D-C282C11E1D98}#1.0#0"; "IFEpson.ocx"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
+Object = "{AFD24A52-2823-4FBD-B75D-C282C11E1D98}#1.0#0"; "IFEpson.ocx"
 Begin VB.Form frmFacturaCliente 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Factura de Clientes..."
@@ -28,6 +28,12 @@ Begin VB.Form frmFacturaCliente
    MinButton       =   0   'False
    ScaleHeight     =   7200
    ScaleWidth      =   10680
+   Begin EPSON_Impresora_Fiscal.PrinterFiscal pf 
+      Left            =   2280
+      Top             =   6600
+      _ExtentX        =   847
+      _ExtentY        =   847
+   End
    Begin VB.Frame fracheque 
       Height          =   1845
       Left            =   2880
@@ -363,7 +369,7 @@ Begin VB.Form frmFacturaCliente
       Height          =   5175
       Left            =   5520
       TabIndex        =   75
-      Top             =   1440
+      Top             =   1560
       Width           =   4935
       Begin VB.TextBox txtImportePago 
          Height          =   315
@@ -528,12 +534,6 @@ Begin VB.Form frmFacturaCliente
       Visible         =   0   'False
       Width           =   1335
    End
-   Begin EPSON_Impresora_Fiscal.PrinterFiscal pf 
-      Left            =   1170
-      Top             =   6240
-      _ExtentX        =   847
-      _ExtentY        =   847
-   End
    Begin VB.CommandButton cmdImprimir 
       Caption         =   "&Imprimir"
       Height          =   450
@@ -577,6 +577,7 @@ Begin VB.Form frmFacturaCliente
       _ExtentY        =   11880
       _Version        =   393216
       Tabs            =   2
+      Tab             =   1
       TabsPerRow      =   5
       TabHeight       =   512
       ForeColor       =   -2147483630
@@ -591,32 +592,27 @@ Begin VB.Form frmFacturaCliente
       EndProperty
       TabCaption(0)   =   "&Datos"
       TabPicture(0)   =   "frmFacturaCliente.frx":0012
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Label12"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "lblblockeado"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "Frame3"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "Frame1"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "FrameFactura"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "FrameCliente"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "txtObservaciones"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "&Buscar"
       TabPicture(1)   =   "frmFacturaCliente.frx":002E
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "GrdModulos"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "frameBuscar"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       Begin VB.TextBox txtObservaciones 
          BackColor       =   &H00C0FFFF&
          Height          =   285
-         Left            =   1350
+         Left            =   -73650
          MaxLength       =   60
          TabIndex        =   11
          Top             =   6360
@@ -634,7 +630,7 @@ Begin VB.Form frmFacturaCliente
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1710
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   45
          Top             =   345
          Width           =   5475
@@ -868,7 +864,7 @@ Begin VB.Form frmFacturaCliente
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1830
-         Left            =   -74805
+         Left            =   195
          TabIndex        =   35
          Top             =   420
          Width           =   10230
@@ -980,7 +976,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54132737
+            Format          =   115081217
             CurrentDate     =   41098
          End
          Begin MSComCtl2.DTPicker FechaHasta 
@@ -994,7 +990,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54132737
+            Format          =   115081217
             CurrentDate     =   41098
          End
          Begin VB.Label lblFechaDesde 
@@ -1059,7 +1055,6 @@ Begin VB.Form frmFacturaCliente
       End
       Begin VB.Frame FrameFactura 
          Caption         =   "Factura..."
-         Enabled         =   0   'False
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   9.75
@@ -1070,7 +1065,7 @@ Begin VB.Form frmFacturaCliente
             Strikethrough   =   0   'False
          EndProperty
          Height          =   1710
-         Left            =   5700
+         Left            =   -69300
          TabIndex        =   33
          Top             =   345
          Width           =   4800
@@ -1126,7 +1121,7 @@ Begin VB.Form frmFacturaCliente
             _Version        =   393216
             CheckBox        =   -1  'True
             DateIsNull      =   -1  'True
-            Format          =   54132737
+            Format          =   115081217
             CurrentDate     =   41098
          End
          Begin VB.Label Ltipo_fac 
@@ -1205,7 +1200,7 @@ Begin VB.Form frmFacturaCliente
       End
       Begin MSFlexGridLib.MSFlexGrid GrdModulos 
          Height          =   4245
-         Left            =   -74835
+         Left            =   165
          TabIndex        =   26
          Top             =   2400
          Width           =   10260
@@ -1232,7 +1227,7 @@ Begin VB.Form frmFacturaCliente
       End
       Begin VB.Frame Frame1 
          Height          =   615
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   54
          Top             =   1965
          Width           =   10395
@@ -1363,7 +1358,7 @@ Begin VB.Form frmFacturaCliente
             Strikethrough   =   0   'False
          EndProperty
          Height          =   3810
-         Left            =   105
+         Left            =   -74895
          TabIndex        =   34
          Top             =   2505
          Width           =   10395
@@ -1824,7 +1819,7 @@ Begin VB.Form frmFacturaCliente
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   255
-         Left            =   4560
+         Left            =   -70440
          TabIndex        =   142
          Top             =   0
          Visible         =   0   'False
@@ -1834,7 +1829,7 @@ Begin VB.Form frmFacturaCliente
          AutoSize        =   -1  'True
          Caption         =   "Observaciones:"
          Height          =   195
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   115
          Top             =   6360
          Width           =   1125
@@ -2278,10 +2273,10 @@ Private Sub CmdBuscAprox_Click()
         sql = sql & " AND FC.CLI_CODIGO=" & XN(txtBuscaCliente.Text)
     End If
     If FechaDesde.Value <> "" Then
-        sql = sql & " AND FC.FCL_FECHA>=" & XDQ(FechaDesde.Value)
+        sql = sql & " AND FC.FCL_FECHA>=" & XS(Left(FechaDesde.Value, 10))
     End If
     If FechaHasta.Value <> "" Then
-        sql = sql & " AND FC.FCL_FECHA<=" & XDQ(FechaHasta.Value)
+        sql = sql & " AND FC.FCL_FECHA<=" & XS(Left(FechaDesde.Value, 10))
     End If
     If cboFactura1.List(cboFactura1.ListIndex) <> "(Todas)" Then
         sql = sql & " AND FC.TCO_CODIGO=" & cboFactura1.ItemData(cboFactura1.ListIndex)
@@ -2355,7 +2350,7 @@ Private Function grabar_factura()
         sql = sql & cboFactura.ItemData(cboFactura.ListIndex) & ","
         sql = sql & XN(txtNroFactura.Text) & ","
         sql = sql & XN(txtNroSucursal.Text) & ","
-        sql = sql & XDQ(FechaFactura.Value) & ","
+        sql = sql & XS(FechaFactura.Value) & ","
         sql = sql & XN(txtPorcentajeIva.Text) & ","
         sql = sql & XN(txtImporteIvaB.Text) & "," 'uso este campo no visible para guardar la info de las FAC B
         sql = sql & cboFormaPago.ItemData(cboFormaPago.ListIndex) & ","
@@ -2539,9 +2534,9 @@ Private Sub cmdGrabar_Click()
         If FISCAL = "TMT900FA" Then
             ImprimoFiscalEpsondll 2
         Else
-            Imprimo_Fiscal
-            errores_impresion
-            ActualizoTotalesFiscales
+            'Imprimo_Fiscal
+            'errores_impresion
+            'ActualizoTotalesFiscales
         End If
         
         CmdNuevo_Click
@@ -4988,8 +4983,8 @@ Private Sub txtCodCli_LostFocus()
                         Case 1 'FACTURAS A
                             
                             
-                            pf.Status ("A")
-                            txtNroFactura.Text = Val(pf.AnswerField_7) + 1
+                            'pf.Status ("A")
+                            'txtNroFactura.Text = Val(pf.AnswerField_7) + 1
     '                        sql = "SELECT FACTURA_C FROM PARAMETROS"
     '                        Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
     '
@@ -4999,8 +4994,8 @@ Private Sub txtCodCli_LostFocus()
     '                        Rec1.Close
                             
                         Case 2 'FACTURA B
-                            pf.Status ("A")
-                            txtNroFactura.Text = Val(pf.AnswerField_5) + 1
+                            'pf.Status ("A")
+                            'txtNroFactura.Text = Val(pf.AnswerField_5) + 1
     '                        sql = "SELECT FACTURA_B FROM PARAMETROS"
     '                        Rec1.Open sql, DBConn, adOpenStatic, adLockOptimistic
     '
@@ -5010,8 +5005,8 @@ Private Sub txtCodCli_LostFocus()
     '                        Rec1.Close
                         Case 3 'FACTURA C
                         Case 10000 'PARA TIKET
-                            pf.Status ("A")
-                            txtNroFactura.Text = Val(pf.AnswerField_4) + 1
+                            'pf.Status ("A")
+                            'txtNroFactura.Text = Val(pf.AnswerField_4) + 1
                     End Select
                End If
             End If

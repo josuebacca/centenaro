@@ -197,7 +197,7 @@ Begin VB.Form frmLibroVentas2
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   51904513
+         Format          =   115081217
          CurrentDate     =   41098
       End
       Begin MSComCtl2.DTPicker FechaHasta 
@@ -211,7 +211,7 @@ Begin VB.Form frmLibroVentas2
          _Version        =   393216
          CheckBox        =   -1  'True
          DateIsNull      =   -1  'True
-         Format          =   51904513
+         Format          =   115081217
          CurrentDate     =   41098
       End
       Begin VB.Label Label9 
@@ -432,7 +432,7 @@ Private Sub cmdAceptar_Click()
      'On Error GoTo CLAVO
      Screen.MousePointer = vbHourglass
      'DBConn.BeginTrans
-     lblestado.Caption = "Buscando Datos..."
+     lblEstado.Caption = "Buscando Datos..."
      
     If optlibro.Value = True Then
         'BORRO LA TABLA TEMPORAL DE IVA VENTAS
@@ -448,7 +448,7 @@ Private Sub cmdAceptar_Click()
         'RETENCIONES
         'BUSCO_RETENCIONES
             
-        lblestado.Caption = ""
+        lblEstado.Caption = ""
         'DBConn.CommitTrans
         'cargo el reporte
         ListarLibroIVA
@@ -461,7 +461,7 @@ Private Sub cmdAceptar_Click()
         'ListarLibroIVA
         
         BUSCO_CIERRESZ
-        lblestado.Caption = ""
+        lblEstado.Caption = ""
         'DBConn.CommitTrans
         ListarCierreZ
     End If
@@ -635,10 +635,11 @@ End Function
 '
 'End Function
 Private Sub ListarLibroIVA()
-    lblestado.Caption = "Buscando Listado..."
+    lblEstado.Caption = "Buscando Listado..."
     Rep.WindowState = crptMaximized
     Rep.WindowBorderStyle = crptNoBorder
-    Rep.Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=SIHDG"
+    'Rep.Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=SIHDG"
+    Rep.Connect = "driver=SQL Server;server=" & SERVIDOR & ";DATABASE=" & BASEDATO & ";uid=sa;pwd=44pilar$"
     Rep.Formulas(0) = ""
     Rep.Formulas(1) = ""
     Rep.Formulas(2) = ""
@@ -662,7 +663,7 @@ Private Sub ListarLibroIVA()
     End If
      Rep.Action = 1
      
-     lblestado.Caption = ""
+     lblEstado.Caption = ""
      Rep.Formulas(0) = ""
      Rep.Formulas(1) = ""
      Rep.Formulas(2) = ""
@@ -671,7 +672,7 @@ Private Sub ListarLibroIVA()
      
 End Sub
 Private Sub ListarCierreZ()
-    lblestado.Caption = "Buscando Listado..."
+    lblEstado.Caption = "Buscando Listado..."
     Rep.WindowState = crptMaximized
     Rep.WindowBorderStyle = crptNoBorder
     Rep.Connect = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=SIHDG"
@@ -698,7 +699,7 @@ Private Sub ListarCierreZ()
     End If
      Rep.Action = 1
      
-     lblestado.Caption = ""
+     lblEstado.Caption = ""
      Rep.Formulas(0) = ""
      Rep.Formulas(1) = ""
      Rep.Formulas(2) = ""
@@ -730,7 +731,7 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub Form_Load()
-    lblestado.Caption = ""
+    lblEstado.Caption = ""
     lblPor.Caption = "100 %"
     Call Centrar_pantalla(Me)
     Set rec = New ADODB.Recordset
@@ -903,8 +904,8 @@ Private Sub BUSCO_FACTURAS()
     sql1 = sql1 & " AND FC.CLI_CODIGO=C.CLI_CODIGO"
     'busco todas las facs
     'sql1 = sql1 & " AND FC.EST_CODIGO = 3" 'ESTADO DEFINITIVO Y ANULADO
-    If FechaDesde <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA>=" & XDQ(FechaDesde)
-    If FechaHasta <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA<=" & XDQ(FechaHasta)
+    If FechaDesde <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA>=" & XS(Left(FechaDesde, 10))
+    If FechaHasta <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA<=" & XS(Left(FechaHasta, 10))
 '    If txtZdesde.Text <> "" Then
 '        FacADesde = BUSCO_UFACZANT(txtZdesde.Text, 1)
 '        sql1 = sql1 & " AND FC.TCO_CODIGO=1 AND FC.FCL_NUMERO >= " & FacADesde
@@ -931,8 +932,8 @@ Private Sub BUSCO_FACTURAS()
     sql1 = sql1 & " FC.TCO_CODIGO=TC.TCO_CODIGO"
     sql1 = sql1 & " AND FC.CLI_CODIGO=C.CLI_CODIGO"
     'sql1 = sql1 & " AND FC.EST_CODIGO = 3" 'ESTADO DEFINITIVO Y ANULADO
-    If FechaDesde <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA>=" & XDQ(FechaDesde)
-    If FechaHasta <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA<=" & XDQ(FechaHasta)
+    If FechaDesde <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA>=" & XS(Left(FechaDesde, 10))
+    If FechaHasta <> "" Then sql1 = sql1 & " AND FC.FCL_FECHA<=" & XS(Left(FechaHasta, 10))
 '    If txtZdesde.Text <> "" Then
 '        FacBDesde = BUSCO_UFACZANT(txtZdesde.Text, 2)
 '        sql1 = sql1 & " AND FC.TCO_CODIGO=2 AND FC.FCL_NUMERO >= " & FacBDesde
@@ -956,7 +957,7 @@ Private Sub BUSCO_FACTURAS()
             sql1 = "INSERT INTO TMP_LIBRO_IVA_VENTAS (FECHA,COMPROBANTE,NUMERO,"
             sql1 = sql1 & "CLIENTE,CUIT,INGBRUTOS,TASAVIAL,SUBTOTAL,IVA,TOTIVA,TOTAL,RETENCION,IMPINT,CIERREZ)"
             sql1 = sql1 & "VALUES ("
-            sql1 = sql1 & XDQ(rec!FCL_FECHA) & ","
+            sql1 = sql1 & XS(rec!FCL_FECHA) & ","
             sql1 = sql1 & XS(rec!TCO_ABREVIA) & ","
             sql1 = sql1 & XS(Format(rec!FCL_SUCURSAL, "0000") & "-" & Format(rec!FCL_NUMERO, "00000000")) & ","
             If rec!EST_CODIGO = 2 Then ' anuladas

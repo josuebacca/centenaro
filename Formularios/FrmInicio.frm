@@ -143,7 +143,11 @@ Public Sub Conexion()
     Set DBConn = New ADODB.Connection
     'DBConn.ConnectionString = "ODBC;DATABASE=;UID=" & mNomUser & ";PWD=" & mPassword & ";DSN=" & DSN_DEF
     'DBConn.ConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=SISESTILO"
-    DBConn.ConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=" & SERVIDOR
+    ''''''''''''''''''''''''''''''''''''''''''
+    'DBConn.ConnectionString = "Provider=MSDASQL.1;Persist Security Info=False;Data Source=" & SERVIDOR
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''
+    DBConn.ConnectionString = "driver=SQL Server;server=" & SERVIDOR & ";DATABASE=" & BASEDATO & ";uid=sa;pwd=44pilar$"
+    
     DBConn.ConnectionTimeout = 0       'Default msado10.hlp => 15
     DBConn.CommandTimeout = 0          'Default msado10.hlp => 30
     
@@ -152,11 +156,12 @@ Public Sub Conexion()
              "Initial Catalog=Centenaro; " & _
              "Data Source=DANIELQ\NANEL; " & _
              "integrated security=SSPI; persist security info=True;"
-    'DBConn.ConnectionString = "driver={SQL Server}; server=DANIELQ;database=Centenaro"
-    DBConn.Open 'DBConn.ConnectionString, txtUsuario, TxtClave
+    
+    DBConn.Open 'DBConn.ConnectionString, TxtUsuario, TxtClave
+
 '    ME CONECTO !
 '    Set DBConn = New ADODB.Connection
-'    DBConn.ConnectionString = "driver={SQL Server};server=" & SERVIDOR & ";DATABASE=" & BASEDATO
+'    DBConn.ConnectionString = "driver={SQL Server}; server=DANIELQ;database=Centenaro"
 '    DBConn.ConnectionTimeout = 0       'Default msado10.hlp => 15
 '    DBConn.CommandTimeout = 0          'Default msado10.hlp => 30
 '    DBConn.Open DBConn.ConnectionString, TxtUsuario, TxtClave
